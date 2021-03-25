@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Leonhaiwang.github.io</id>
     <title>Leon</title>
-    <updated>2021-03-25T08:35:24.815Z</updated>
+    <updated>2021-03-25T08:47:44.535Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Leonhaiwang.github.io"/>
     <link rel="self" href="https://Leonhaiwang.github.io/atom.xml"/>
@@ -10,6 +10,78 @@
     <logo>https://Leonhaiwang.github.io/images/avatar.png</logo>
     <icon>https://Leonhaiwang.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, Leon</rights>
+    <entry>
+        <title type="html"><![CDATA[从输入URL到页面加载发生了什么]]></title>
+        <id>https://Leonhaiwang.github.io/post/cong-shu-ru-url-dao-ye-mian-jia-zai-fa-sheng-liao-shi-me/</id>
+        <link href="https://Leonhaiwang.github.io/post/cong-shu-ru-url-dao-ye-mian-jia-zai-fa-sheng-liao-shi-me/">
+        </link>
+        <updated>2021-03-25T08:45:33.000Z</updated>
+        <content type="html"><![CDATA[<p>😀😃😄</p>
+<ul>
+<li>DNS域名解析：将域名解析成IP地址</li>
+<li>TCP连接：三次握手</li>
+<li>发送HTTP请求</li>
+<li>服务器处理请求并返回HTTP报文</li>
+<li>浏览器解析渲染页面</li>
+<li>断开连接：TCP四次挥手</li>
+</ul>
+<h2 id="dns域名解析">DNS域名解析</h2>
+<p>计算机的唯一标识是IP地址，但是IP地址并不方面记忆。一个网址到一个IP的转换。</p>
+<ul>
+<li>首先在本地域名中查找IP地址，如果没有找到，本地域名向根域名服务器发送一个请求，如果根域名服务器中也没有，那会就会找到COM顶级域名查找，依次类推。直到找到以后存在缓存本地中。</li>
+<li>整个过程是一个从右往左的过程。www.google.com.      .   就是对应的根域名服务器，通常会省略。</li>
+</ul>
+<p>DNS存在多级缓存，从浏览器的距离排序：浏览器缓存，系统缓存，路由器缓存，IPS服务器缓存，根域名服务器缓存，顶级域名服务器缓存，主域名服务器缓存。</p>
+<p>DNS可以返回一个合适的IP给客户。位置，负载量，DNS负载均衡，重定向，是不一样的，但是在用户眼里是一样的。</p>
+<h2 id="tcp连接">TCP连接</h2>
+<p>三次握手</p>
+<h2 id="http请求">HTTP请求</h2>
+<p>客户端：构建HTTP请求报文并通过TCP协议发送到服务器指定端口（HTTP：80、HTTPS：443）。</p>
+<h3 id="请求行">请求行</h3>
+<p>请求方法：get,post,head,put,delete,patch,trace,options</p>
+<p>URL:请求地址：&lt;协议&gt;：//&lt;主机&gt;：&lt;端口&gt;/&lt;路径&gt;？&lt;参数&gt;&lt;组成&gt;  http://localhost:8800/user?id=20</p>
+<p>协议版本号：http版本号</p>
+<h3 id="请求头">请求头</h3>
+<p>请求的附加信息：关键字：值/对。HOST：主机名   keepalive：持久连接 User-agent:请求发出者</p>
+<h3 id="请求体">请求体</h3>
+<p>请求体：可以承载多个请求参数的数据 name=tom&amp;age=12</p>
+<h2 id="服务器处理并返回http报文">服务器处理并返回http报文</h2>
+<p>后端在固定的端口接受到TCP报文，对TCP连接进行处理，对http协议进行解析，并按照报文格式进一步封装成http request对象供上层使用。</p>
+<p>服务器会安装处理请求的应用：web Server.     apache，Nginx，lighttpd ，IIS</p>
+<h3 id="组成">组成</h3>
+<p>响应行：响应版本，状态描述，状态码：200，301,302，303,400,404,500，403</p>
+<p>响应报头：connection，Server</p>
+<p>响应报文：服务器返回给浏览器的信息，html，css，js，图片文件等，并不是所有的响应报文都有相应数据。</p>
+<h2 id="浏览器解析渲染页面">浏览器解析渲染页面</h2>
+<p>边解析边渲染。</p>
+<ul>
+<li>根据html解析DOM树</li>
+<li>根据css生成CSS规则树</li>
+<li>结合DOM树和规则树生成渲染树rendertree</li>
+<li>根据渲染树计算每一个节点的信息。</li>
+<li>根据计算好的信息绘制页面。</li>
+</ul>
+<h3 id="根据html解析dom树">根据html解析DOM树</h3>
+<p>根据html内容，将标签按照结构解析成DOM树，DOM树解析的过程是一个深度优先的过程，（先构建当前DOM元素的子阶段，再构建下一个兄弟节点）</p>
+<p>在构建DOM树的过程中，如果遇到script标签，会等脚本执行完毕以后再继续</p>
+<h3 id="根据css生成css规则树">根据css生成CSS规则树</h3>
+<p>解析css生成树完成以前浏览器不会进行渲染。</p>
+<p>解析css规则树的时候，js将会暂停，知道css规则树就绪。</p>
+<h3 id="结合dom树和规则树生成渲染树rendertree">结合DOM树和规则树生成渲染树rendertree</h3>
+<p>DOM树和css规则树全部生成好以后，浏览器才会开始构建渲染树</p>
+<p>精简css可以加快css规则树的构建，加快页面渲染</p>
+<h3 id="根据渲染树计算每一个节点的信息-布局">根据渲染树计算每一个节点的信息。布局</h3>
+<p>布局：通过渲染树中的对象，计算出每一个渲染对象的位置和尺寸</p>
+<p>回流：在布局形成后，发生了某个部分变化引起了布局，需要回去重新布局</p>
+<h3 id="根据计算好的信息绘制页面">根据计算好的信息绘制页面。</h3>
+<p>系统遍历呈现树，并且调用‘paint’的方法，将呈现器内容显示在屏幕上。</p>
+<p>重绘：某个元素的背景颜色，文字颜色等，不影响元素周围和内部的属性</p>
+<p>回流：某个元素的大小变化，需要重新计算	渲染树，重新渲染。</p>
+<p>事件循环：JS</p>
+<h2 id="断开连接">断开连接</h2>
+<p>TCP四次挥手。</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[ES6]]></title>
         <id>https://Leonhaiwang.github.io/post/es6/</id>
