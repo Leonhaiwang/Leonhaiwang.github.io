@@ -1,97 +1,94 @@
+<!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="utf-8" >
+
 <title>你了解浏览器缓存嘛？ | Leon</title>
-<link rel="shortcut icon" href="https://Leonhaiwang.github.io/favicon.ico?v=1616680544716">
-<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<meta name="description" content="It is always day one !">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="https://Leonhaiwang.github.io/favicon.ico?v=1616680643690">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link rel="stylesheet" href="https://Leonhaiwang.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="你了解浏览器缓存嘛？ | Leon - Atom Feed" href="https://Leonhaiwang.github.io/atom.xml">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
 
-    <meta name="description" content="浏览器缓存着用户通过http获取的所有的资源，在下一次请求的时候可以避免重复向服务器发出多余的请求。
-强缓存
-浏览器在加载资源的时候，会先判断是否命中强缓存，是否命中协商缓存。
-如果命中强缓存，就会直接使用缓存中的信息，不会向服务器发送请求..." />
-    <meta name="keywords" content="" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
-    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
   </head>
   <body>
-    <div class="main">
-      <div class="main-content">
-        <div class="site-header">
-  <a href="https://Leonhaiwang.github.io">
-  <img class="avatar" src="https://Leonhaiwang.github.io/images/avatar.png?v=1616680544716" alt="">
-  </a>
-  <h1 class="site-title">
-    Leon
-  </h1>
-  <p class="site-description">
-    It is always day one !
-  </p>
-  <div class="menu-container">
-    
-      
-        <a href="/" class="menu">
-          首页
-        </a>
-      
-    
-      
-        <a href="/archives" class="menu">
-          归档
-        </a>
-      
-    
-      
-        <a href="/tags" class="menu">
-          标签
-        </a>
-      
-    
-      
-        <a href="/post/about" class="menu">
-          关于
-        </a>
-      
-    
+  
+    <nav class="navbar border fixed split-nav">
+  <div class="nav-brand">
+    <h3><a href="https://Leonhaiwang.github.io">Leon</a></h3>
   </div>
-  <div class="social-container">
-    
-      
-    
-      
-    
-      
-    
-      
-    
-      
-    
-  </div>
-</div>
-
-        <div class="post-detail">
-          <article class="post">
-            <h2 class="post-title">
-              你了解浏览器缓存嘛？
-            </h2>
-            <div class="post-info">
-              <span>
-                2021-03-25
-              </span>
-              <span>
-                3 min read
-              </span>
-              
-            </div>
+  <div class="collapsible">
+    <input id="collapsible1" type="checkbox" name="collapsible1">
+    <button>
+      <label for="collapsible1">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+      </label>
+    </button>
+    <div class="collapsible-body">
+      <ul class="inline">
+        
+          <li>
             
-            <div class="post-content-wrapper">
-              <div class="post-content">
-                <p>浏览器缓存着用户通过http获取的所有的资源，在下一次请求的时候可以避免重复向服务器发出多余的请求。</p>
+              <a href="/" class="menu">
+                首页
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/archives" class="menu">
+                归档
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/tags" class="menu">
+                标签
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/post/about" class="menu">
+                关于
+              </a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div id="top" class="row site">
+      <div class="sm-12 md-8 col">
+        <div class="paper">
+          <article class="article">
+            <h1>你了解浏览器缓存嘛？</h1>
+            <p class="article-meta">
+              2021-03-25
+              
+            </p>
+            
+            <div class="post-content">
+              <p>浏览器缓存着用户通过http获取的所有的资源，在下一次请求的时候可以避免重复向服务器发出多余的请求。</p>
 <h2 id="强缓存">强缓存</h2>
 <p>浏览器在加载资源的时候，会先判断是否命中强缓存，是否命中协商缓存。</p>
 <p>如果命中强缓存，就会直接使用缓存中的信息，不会向服务器发送请求。</p>
@@ -131,89 +128,152 @@
 <li>Ctrl+f5，浏览器不使用缓存、</li>
 </ol>
 
-              </div>
-              <div class="toc-container">
-                <ul class="markdownIt-TOC">
-<li>
-<ul>
-<li><a href="#%E5%BC%BA%E7%BC%93%E5%AD%98">强缓存</a></li>
-<li><a href="#%E5%8D%8F%E5%95%86%E7%BC%93%E5%AD%98">协商缓存</a>
-<ul>
-<li><a href="#last-modified">Last-Modified</a></li>
-</ul>
-</li>
-<li><a href="#%E7%94%A8%E6%88%B7%E8%A1%8C%E4%B8%BA%E5%AF%B9%E6%B5%8F%E8%A7%88%E5%99%A8%E7%BC%93%E5%AD%98%E7%9A%84%E5%BD%B1%E5%93%8D">用户行为对浏览器缓存的影响</a></li>
-</ul>
-</li>
-</ul>
-
-              </div>
             </div>
           </article>
         </div>
-
+        <div class="paper" data-aos="fade-in">
+          
+            <div class="next-post">
+              <div class="next">
+                下一篇
+              </div>
+              <a href="https://Leonhaiwang.github.io/post/cong-shu-ru-url-dao-ye-mian-jia-zai-fa-sheng-liao-shi-me/">
+                <h3 class="post-title">
+                  从输入URL到页面加载发生了什么
+                </h3>
+              </a>
+            </div>
+          
+        </div>
         
-          <div class="next-post">
-            <div class="next">下一篇</div>
-            <a href="https://Leonhaiwang.github.io/post/cong-shu-ru-url-dao-ye-mian-jia-zai-fa-sheng-liao-shi-me/">
-              <h3 class="post-title">
-                从输入URL到页面加载发生了什么
-              </h3>
-            </a>
-          </div>
-        
+      </div>
 
+      <div class="sm-12 md-4 col sidebar">
+  <div class="paper info-container">
+    <img src="https://Leonhaiwang.github.io/images/avatar.png?v=1616680643690" class="no-responsive avatar">
+    <div class="text-muted">It is always day one !</div>
+    <div class="social-container">
+      
         
-
-        <div class="site-footer">
-   <a href="https://github.com/Leonhaiwang" target="_blank">Leon github</a>
-  <a class="rss" href="https://Leonhaiwang.github.io/atom.xml" target="_blank">
-    <i class="ri-rss-line"></i> RSS
-  </a>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      最新文章
+    </div>
+    <div class="row">
+      <ul>
+        
+          
+            <li>
+              <a href="https://Leonhaiwang.github.io/post/wei-lei-he-wei-yuan-su-de-qu-bie-shi-yong-chang-jing/">伪类和伪元素的区别？使用场景？</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://Leonhaiwang.github.io/post/callapplybind-li-jie-ji-shi-xian/">call、apply、bind 理解及实现</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://Leonhaiwang.github.io/post/fang-dou-and-jie-liu/">防抖and节流</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://Leonhaiwang.github.io/post/http-chu-tan/">HTTP 初探</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://Leonhaiwang.github.io/post/tcp-xiang-guan-wen-ti/">TCP相关问题</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://Leonhaiwang.github.io/post/ni-liao-jie-liu-lan-qi-huan-cun-ma/">你了解浏览器缓存嘛？</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://Leonhaiwang.github.io/post/cong-shu-ru-url-dao-ye-mian-jia-zai-fa-sheng-liao-shi-me/">从输入URL到页面加载发生了什么</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://Leonhaiwang.github.io/post/es6/">ES6</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://Leonhaiwang.github.io/post/vue/">vue</a>
+            </li>
+          
+        
+      </ul>
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      标签列表
+    </div>
+    <div class="row">
+      
+        <a href="https://Leonhaiwang.github.io/tag/wBLqdA-6s/" class="badge ">
+          JavaScript
+        </a>
+      
+        <a href="https://Leonhaiwang.github.io/tag/TFbKUxkyH/" class="badge ">
+          前端
+        </a>
+      
+        <a href="https://Leonhaiwang.github.io/tag/UItHKgJej/" class="badge secondary">
+          性能优化
+        </a>
+      
+        <a href="https://Leonhaiwang.github.io/tag/ausBOyWhn/" class="badge secondary">
+          计算机网络
+        </a>
+      
+    </div>
+  </div>
+  <div class="paper">
+     <a href="https://github.com/Leonhaiwang" target="_blank">Leon github</a> | <a class="rss" href="https://Leonhaiwang.github.io/atom.xml" target="_blank">RSS</a>
+  </div>
 </div>
 
-      </div>
+
     </div>
 
-    <script>
-      hljs.initHighlightingOnLoad()
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
 
-      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+<script type="application/javascript">
 
-      // This should probably be throttled.
-      // Especially because it triggers during smooth scrolling.
-      // https://lodash.com/docs/4.17.10#throttle
-      // You could do like...
-      // window.addEventListener("scroll", () => {
-      //    _.throttle(doThatStuff, 100);
-      // });
-      // Only not doing it here to keep this Pen dependency-free.
+AOS.init();
 
-      window.addEventListener("scroll", event => {
-        let fromTop = window.scrollY;
+hljs.initHighlightingOnLoad()
 
-        mainNavLinks.forEach((link, index) => {
-          let section = document.getElementById(decodeURI(link.hash).substring(1));
-          let nextSection = null
-          if (mainNavLinks[index + 1]) {
-            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
-          }
-          if (section.offsetTop <= fromTop) {
-            if (nextSection) {
-              if (nextSection.offsetTop > fromTop) {
-                link.classList.add("current");
-              } else {
-                link.classList.remove("current");    
-              }
-            } else {
-              link.classList.add("current");
-            }
-          } else {
-            link.classList.remove("current");
-          }
-        });
-      });
+</script>
 
-    </script>
+
+
+
   </body>
 </html>

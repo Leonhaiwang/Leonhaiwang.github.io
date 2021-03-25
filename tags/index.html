@@ -1,94 +1,231 @@
+<!DOCTYPE html>
 <html>
   <head>
-  <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Leon</title>
-<link rel="shortcut icon" href="https://Leonhaiwang.github.io/favicon.ico?v=1616680544716">
-<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+    <meta charset="utf-8" >
+
+<title>标签列表 | Leon</title>
+<meta name="description" content="It is always day one !">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="https://Leonhaiwang.github.io/favicon.ico?v=1616680643690">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link rel="stylesheet" href="https://Leonhaiwang.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="Leon - Atom Feed" href="https://Leonhaiwang.github.io/atom.xml">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
 
-  <meta name="description" content="It is always day one !" />
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
   </head>
   <body>
-    <div class="main">
-      <div class="main-content">
-        <div class="site-header">
-  <a href="https://Leonhaiwang.github.io">
-  <img class="avatar" src="https://Leonhaiwang.github.io/images/avatar.png?v=1616680544716" alt="">
-  </a>
-  <h1 class="site-title">
-    Leon
-  </h1>
-  <p class="site-description">
-    It is always day one !
-  </p>
-  <div class="menu-container">
-    
-      
-        <a href="/" class="menu">
-          首页
-        </a>
-      
-    
-      
-        <a href="/archives" class="menu">
-          归档
-        </a>
-      
-    
-      
-        <a href="/tags" class="menu">
-          标签
-        </a>
-      
-    
-      
-        <a href="/post/about" class="menu">
-          关于
-        </a>
-      
-    
+    <nav class="navbar border fixed split-nav">
+  <div class="nav-brand">
+    <h3><a href="https://Leonhaiwang.github.io">Leon</a></h3>
   </div>
-  <div class="social-container">
-    
-      
-    
-      
-    
-      
-    
-      
-    
-      
-    
-  </div>
-</div>
-
-
-        <div class="tags-container">
-          
-            <a class="tag" href="https://Leonhaiwang.github.io/tag/wBLqdA-6s/">JavaScript</a>
-          
-            <a class="tag" href="https://Leonhaiwang.github.io/tag/TFbKUxkyH/">前端</a>
-          
-            <a class="tag" href="https://Leonhaiwang.github.io/tag/UItHKgJej/">性能优化</a>
-          
-            <a class="tag" href="https://Leonhaiwang.github.io/tag/ausBOyWhn/">计算机网络</a>
-          
-        </div>
-
-        <div class="site-footer">
-   <a href="https://github.com/Leonhaiwang" target="_blank">Leon github</a>
-  <a class="rss" href="https://Leonhaiwang.github.io/atom.xml" target="_blank">
-    <i class="ri-rss-line"></i> RSS
-  </a>
-</div>
-
-      </div>
+  <div class="collapsible">
+    <input id="collapsible1" type="checkbox" name="collapsible1">
+    <button>
+      <label for="collapsible1">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+      </label>
+    </button>
+    <div class="collapsible-body">
+      <ul class="inline">
+        
+          <li>
+            
+              <a href="/" class="menu">
+                首页
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/archives" class="menu">
+                归档
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/tags" class="menu">
+                标签
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/post/about" class="menu">
+                关于
+              </a>
+            
+          </li>
+        
+      </ul>
     </div>
+  </div>
+</nav>
+
+    <div id="top" class="row site">
+      <div class="sm-12 md-8 col">
+        <div class="paper">
+          <h2 class="tag-list-title">标签列表</h2>
+          <div class="row tags-container">
+            
+              <a href="https://Leonhaiwang.github.io/tag/wBLqdA-6s/" class="badge warning">
+                JavaScript
+              </a>
+            
+              <a href="https://Leonhaiwang.github.io/tag/TFbKUxkyH/" class="badge secondary">
+                前端
+              </a>
+            
+              <a href="https://Leonhaiwang.github.io/tag/UItHKgJej/" class="badge success">
+                性能优化
+              </a>
+            
+              <a href="https://Leonhaiwang.github.io/tag/ausBOyWhn/" class="badge secondary">
+                计算机网络
+              </a>
+            
+          </div>
+        </div>
+      </div>
+      <div class="sm-12 md-4 col sidebar">
+  <div class="paper info-container">
+    <img src="https://Leonhaiwang.github.io/images/avatar.png?v=1616680643690" class="no-responsive avatar">
+    <div class="text-muted">It is always day one !</div>
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      最新文章
+    </div>
+    <div class="row">
+      <ul>
+        
+          
+            <li>
+              <a href="https://Leonhaiwang.github.io/post/wei-lei-he-wei-yuan-su-de-qu-bie-shi-yong-chang-jing/">伪类和伪元素的区别？使用场景？</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://Leonhaiwang.github.io/post/callapplybind-li-jie-ji-shi-xian/">call、apply、bind 理解及实现</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://Leonhaiwang.github.io/post/fang-dou-and-jie-liu/">防抖and节流</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://Leonhaiwang.github.io/post/http-chu-tan/">HTTP 初探</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://Leonhaiwang.github.io/post/tcp-xiang-guan-wen-ti/">TCP相关问题</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://Leonhaiwang.github.io/post/ni-liao-jie-liu-lan-qi-huan-cun-ma/">你了解浏览器缓存嘛？</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://Leonhaiwang.github.io/post/cong-shu-ru-url-dao-ye-mian-jia-zai-fa-sheng-liao-shi-me/">从输入URL到页面加载发生了什么</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://Leonhaiwang.github.io/post/es6/">ES6</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://Leonhaiwang.github.io/post/vue/">vue</a>
+            </li>
+          
+        
+      </ul>
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      标签列表
+    </div>
+    <div class="row">
+      
+        <a href="https://Leonhaiwang.github.io/tag/wBLqdA-6s/" class="badge secondary">
+          JavaScript
+        </a>
+      
+        <a href="https://Leonhaiwang.github.io/tag/TFbKUxkyH/" class="badge warning">
+          前端
+        </a>
+      
+        <a href="https://Leonhaiwang.github.io/tag/UItHKgJej/" class="badge secondary">
+          性能优化
+        </a>
+      
+        <a href="https://Leonhaiwang.github.io/tag/ausBOyWhn/" class="badge secondary">
+          计算机网络
+        </a>
+      
+    </div>
+  </div>
+  <div class="paper">
+     <a href="https://github.com/Leonhaiwang" target="_blank">Leon github</a> | <a class="rss" href="https://Leonhaiwang.github.io/atom.xml" target="_blank">RSS</a>
+  </div>
+</div>
+  
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<script type="application/javascript">
+
+AOS.init();
+
+hljs.initHighlightingOnLoad()
+
+</script>
+
+
+
+
   </body>
 </html>

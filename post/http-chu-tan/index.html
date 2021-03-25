@@ -1,101 +1,98 @@
+<!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="utf-8" >
+
 <title>HTTP 初探 | Leon</title>
-<link rel="shortcut icon" href="https://Leonhaiwang.github.io/favicon.ico?v=1616680544716">
-<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<meta name="description" content="It is always day one !">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="https://Leonhaiwang.github.io/favicon.ico?v=1616680643690">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link rel="stylesheet" href="https://Leonhaiwang.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="HTTP 初探 | Leon - Atom Feed" href="https://Leonhaiwang.github.io/atom.xml">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
 
-    <meta name="description" content="web是建立在http之上的。
-HTTP协议定义web客户端如何从web服务器请求web页面，以及服务器如何把web页面发送给客户端。
-http请求/响应模型。
-客户端向服务器发送一个请求报文，请求报文包含请求的方法，URL，协议版本，请求..." />
-    <meta name="keywords" content="计算机网络" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
-    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
   </head>
   <body>
-    <div class="main">
-      <div class="main-content">
-        <div class="site-header">
-  <a href="https://Leonhaiwang.github.io">
-  <img class="avatar" src="https://Leonhaiwang.github.io/images/avatar.png?v=1616680544716" alt="">
-  </a>
-  <h1 class="site-title">
-    Leon
-  </h1>
-  <p class="site-description">
-    It is always day one !
-  </p>
-  <div class="menu-container">
-    
-      
-        <a href="/" class="menu">
-          首页
-        </a>
-      
-    
-      
-        <a href="/archives" class="menu">
-          归档
-        </a>
-      
-    
-      
-        <a href="/tags" class="menu">
-          标签
-        </a>
-      
-    
-      
-        <a href="/post/about" class="menu">
-          关于
-        </a>
-      
-    
+  
+    <nav class="navbar border fixed split-nav">
+  <div class="nav-brand">
+    <h3><a href="https://Leonhaiwang.github.io">Leon</a></h3>
   </div>
-  <div class="social-container">
-    
-      
-    
-      
-    
-      
-    
-      
-    
-      
-    
+  <div class="collapsible">
+    <input id="collapsible1" type="checkbox" name="collapsible1">
+    <button>
+      <label for="collapsible1">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+      </label>
+    </button>
+    <div class="collapsible-body">
+      <ul class="inline">
+        
+          <li>
+            
+              <a href="/" class="menu">
+                首页
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/archives" class="menu">
+                归档
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/tags" class="menu">
+                标签
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/post/about" class="menu">
+                关于
+              </a>
+            
+          </li>
+        
+      </ul>
+    </div>
   </div>
-</div>
+</nav>
 
-        <div class="post-detail">
-          <article class="post">
-            <h2 class="post-title">
-              HTTP 初探
-            </h2>
-            <div class="post-info">
-              <span>
-                2021-03-25
-              </span>
-              <span>
-                14 min read
-              </span>
+    <div id="top" class="row site">
+      <div class="sm-12 md-8 col">
+        <div class="paper">
+          <article class="article">
+            <h1>HTTP 初探</h1>
+            <p class="article-meta">
+              2021-03-25
               
-                <a href="https://Leonhaiwang.github.io/tag/ausBOyWhn/" class="post-tag">
-                  # 计算机网络
+                <a href="https://Leonhaiwang.github.io/tag/ausBOyWhn/" class="badge warning">
+                  计算机网络
                 </a>
               
-            </div>
+            </p>
             
-            <div class="post-content-wrapper">
-              <div class="post-content">
-                <p>web是建立在http之上的。</p>
+            <div class="post-content">
+              <p>web是建立在http之上的。</p>
 <p>HTTP协议定义web客户端如何从web服务器请求web页面，以及服务器如何把web页面发送给客户端。</p>
 <p>http请求/响应模型。</p>
 <p>客户端向服务器发送一个请求报文，请求报文包含请求的方法，URL，协议版本，请求头部和请求数据。</p>
@@ -336,143 +333,152 @@ http请求/响应模型。
 <p>部分会说post会先传head，返回100，再传body。</p>
 <p>http中没有明确说明POST会产生两个数据包，实测不会，所以不是post的必然行为。</p>
 
-              </div>
-              <div class="toc-container">
-                <ul class="markdownIt-TOC">
-<li>
-<ul>
-<li><a href="#http%E5%8D%8F%E8%AE%AE%E7%AE%80%E4%BB%8B">HTTP协议简介</a>
-<ul>
-<li><a href="#%E4%B8%B2%E8%A1%8C%E8%BF%9E%E6%8E%A5">串行连接：</a></li>
-<li><a href="#%E6%8C%81%E4%B9%85%E8%BF%9E%E6%8E%A5">持久连接：</a></li>
-<li><a href="#%E7%AE%A1%E9%81%93%E5%8C%96%E8%BF%9E%E6%8E%A5">管道化连接：</a></li>
-<li><a href="#http20%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8">HTTP2.0多路复用：</a></li>
-<li><a href="#websocket">webSocket</a></li>
-</ul>
-</li>
-<li><a href="#http%E7%89%88%E6%9C%AC">HTTP版本</a>
-<ul>
-<li><a href="#20%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8">2.0：多路复用</a></li>
-<li><a href="#30">3.0：</a></li>
-</ul>
-</li>
-<li><a href="#url-and-uri">URL and URI</a></li>
-<li><a href="#http%E6%8A%A5%E6%96%87">HTTP报文</a>
-<ul>
-<li><a href="#%E8%AF%B7%E6%B1%82%E6%8A%A5%E6%96%87">请求报文</a></li>
-<li><a href="#%E5%93%8D%E5%BA%94%E6%8A%A5%E6%96%87">响应报文</a></li>
-<li><a href="#%E8%AF%B7%E6%B1%82%E6%96%B9%E6%B3%95">请求方法</a></li>
-<li><a href="#%E5%B8%B8%E7%94%A8%E7%9A%84%E7%8A%B6%E6%80%81%E7%A0%81">常用的状态码：</a></li>
-<li><a href="#%E9%A6%96%E9%83%A8%E5%AD%97%E6%AE%B5">首部字段</a></li>
-<li><a href="#%E4%B8%A4%E7%A7%8D%E8%AF%B7%E6%B1%82">两种请求：</a>
-<ul>
-<li><a href="#%E7%AE%80%E5%8D%95%E8%AF%B7%E6%B1%82">简单请求：</a></li>
-<li><a href="#%E5%A4%8D%E6%9D%82%E8%AF%B7%E6%B1%82">复杂请求：</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="#web%E6%9C%8D%E5%8A%A1%E5%99%A8">WEB服务器</a>
-<ul>
-<li><a href="#%E6%AD%A3%E5%90%91%E4%BB%A3%E7%90%86">正向代理：</a></li>
-<li><a href="#%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86">反向代理：</a>
-<ul>
-<li><a href="#%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E8%A7%A3%E5%86%B3%E8%B7%A8%E5%9F%9F%E9%97%AE%E9%A2%98">反向代理解决跨域问题：</a></li>
-</ul>
-</li>
-<li><a href="#%E7%BC%93%E5%AD%98%E6%9C%8D%E5%8A%A1%E5%99%A8">缓存服务器：</a></li>
-</ul>
-</li>
-<li><a href="#https">HTTPS</a>
-<ul>
-<li><a href="#%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86">对称加密：</a></li>
-<li><a href="#%E9%9D%9E%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86">非对称加密</a></li>
-<li><a href="#%E6%B7%B7%E5%90%88%E5%8A%A0%E5%AF%86">混合加密：</a></li>
-<li><a href="#ssl">SSL：</a></li>
-<li><a href="#%E7%BC%BA%E7%82%B9">缺点：</a></li>
-</ul>
-</li>
-<li><a href="#http%E4%B8%8Ehttps%E4%B8%BB%E8%A6%81%E5%8C%BA%E5%88%AB">HTTP与HTTPS主要区别</a></li>
-<li><a href="#web%E5%AE%89%E5%85%A8">WEB安全</a>
-<ul>
-<li><a href="#xss%E6%94%BB%E5%87%BB">XSS攻击</a></li>
-<li><a href="#csrf%E6%94%BB%E5%87%BB">CSRF攻击</a></li>
-<li><a href="#%E7%82%B9%E5%87%BB%E5%8A%AB%E6%8C%81">点击劫持</a></li>
-<li><a href="#%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB">中间人攻击</a></li>
-</ul>
-</li>
-<li><a href="#get%E5%92%8Cpost%E5%8C%BA%E5%88%AB">get和post区别：</a></li>
-</ul>
-</li>
-</ul>
-
-              </div>
             </div>
           </article>
         </div>
-
+        <div class="paper" data-aos="fade-in">
+          
+            <div class="next-post">
+              <div class="next">
+                下一篇
+              </div>
+              <a href="https://Leonhaiwang.github.io/post/tcp-xiang-guan-wen-ti/">
+                <h3 class="post-title">
+                  TCP相关问题
+                </h3>
+              </a>
+            </div>
+          
+        </div>
         
-          <div class="next-post">
-            <div class="next">下一篇</div>
-            <a href="https://Leonhaiwang.github.io/post/tcp-xiang-guan-wen-ti/">
-              <h3 class="post-title">
-                TCP相关问题
-              </h3>
-            </a>
-          </div>
-        
+      </div>
 
+      <div class="sm-12 md-4 col sidebar">
+  <div class="paper info-container">
+    <img src="https://Leonhaiwang.github.io/images/avatar.png?v=1616680643690" class="no-responsive avatar">
+    <div class="text-muted">It is always day one !</div>
+    <div class="social-container">
+      
         
-
-        <div class="site-footer">
-   <a href="https://github.com/Leonhaiwang" target="_blank">Leon github</a>
-  <a class="rss" href="https://Leonhaiwang.github.io/atom.xml" target="_blank">
-    <i class="ri-rss-line"></i> RSS
-  </a>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      最新文章
+    </div>
+    <div class="row">
+      <ul>
+        
+          
+            <li>
+              <a href="https://Leonhaiwang.github.io/post/wei-lei-he-wei-yuan-su-de-qu-bie-shi-yong-chang-jing/">伪类和伪元素的区别？使用场景？</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://Leonhaiwang.github.io/post/callapplybind-li-jie-ji-shi-xian/">call、apply、bind 理解及实现</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://Leonhaiwang.github.io/post/fang-dou-and-jie-liu/">防抖and节流</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://Leonhaiwang.github.io/post/http-chu-tan/">HTTP 初探</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://Leonhaiwang.github.io/post/tcp-xiang-guan-wen-ti/">TCP相关问题</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://Leonhaiwang.github.io/post/ni-liao-jie-liu-lan-qi-huan-cun-ma/">你了解浏览器缓存嘛？</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://Leonhaiwang.github.io/post/cong-shu-ru-url-dao-ye-mian-jia-zai-fa-sheng-liao-shi-me/">从输入URL到页面加载发生了什么</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://Leonhaiwang.github.io/post/es6/">ES6</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://Leonhaiwang.github.io/post/vue/">vue</a>
+            </li>
+          
+        
+      </ul>
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      标签列表
+    </div>
+    <div class="row">
+      
+        <a href="https://Leonhaiwang.github.io/tag/wBLqdA-6s/" class="badge secondary">
+          JavaScript
+        </a>
+      
+        <a href="https://Leonhaiwang.github.io/tag/TFbKUxkyH/" class="badge success">
+          前端
+        </a>
+      
+        <a href="https://Leonhaiwang.github.io/tag/UItHKgJej/" class="badge success">
+          性能优化
+        </a>
+      
+        <a href="https://Leonhaiwang.github.io/tag/ausBOyWhn/" class="badge secondary">
+          计算机网络
+        </a>
+      
+    </div>
+  </div>
+  <div class="paper">
+     <a href="https://github.com/Leonhaiwang" target="_blank">Leon github</a> | <a class="rss" href="https://Leonhaiwang.github.io/atom.xml" target="_blank">RSS</a>
+  </div>
 </div>
 
-      </div>
+
     </div>
 
-    <script>
-      hljs.initHighlightingOnLoad()
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
 
-      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+<script type="application/javascript">
 
-      // This should probably be throttled.
-      // Especially because it triggers during smooth scrolling.
-      // https://lodash.com/docs/4.17.10#throttle
-      // You could do like...
-      // window.addEventListener("scroll", () => {
-      //    _.throttle(doThatStuff, 100);
-      // });
-      // Only not doing it here to keep this Pen dependency-free.
+AOS.init();
 
-      window.addEventListener("scroll", event => {
-        let fromTop = window.scrollY;
+hljs.initHighlightingOnLoad()
 
-        mainNavLinks.forEach((link, index) => {
-          let section = document.getElementById(decodeURI(link.hash).substring(1));
-          let nextSection = null
-          if (mainNavLinks[index + 1]) {
-            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
-          }
-          if (section.offsetTop <= fromTop) {
-            if (nextSection) {
-              if (nextSection.offsetTop > fromTop) {
-                link.classList.add("current");
-              } else {
-                link.classList.remove("current");    
-              }
-            } else {
-              link.classList.add("current");
-            }
-          } else {
-            link.classList.remove("current");
-          }
-        });
-      });
+</script>
 
-    </script>
+
+
+
   </body>
 </html>

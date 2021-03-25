@@ -1,113 +1,98 @@
+<!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="utf-8" >
+
 <title>ES6 | Leon</title>
-<link rel="shortcut icon" href="https://Leonhaiwang.github.io/favicon.ico?v=1616680544716">
-<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<meta name="description" content="It is always day one !">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="https://Leonhaiwang.github.io/favicon.ico?v=1616680643690">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link rel="stylesheet" href="https://Leonhaiwang.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="ES6 | Leon - Atom Feed" href="https://Leonhaiwang.github.io/atom.xml">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
-
-    <meta name="description" content="
-[toc]
-1.1 什么是ECMA
-ECMA（European Computer Manufacturers Association）中文名：欧洲计算机制造商协会
-1.2 什么是ECMAScript
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
 
 
-
-版本
-更新
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
 
 
-
-
-ES5
-引入..." />
-    <meta name="keywords" content="前端" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
-    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
   </head>
   <body>
-    <div class="main">
-      <div class="main-content">
-        <div class="site-header">
-  <a href="https://Leonhaiwang.github.io">
-  <img class="avatar" src="https://Leonhaiwang.github.io/images/avatar.png?v=1616680544716" alt="">
-  </a>
-  <h1 class="site-title">
-    Leon
-  </h1>
-  <p class="site-description">
-    It is always day one !
-  </p>
-  <div class="menu-container">
-    
-      
-        <a href="/" class="menu">
-          首页
-        </a>
-      
-    
-      
-        <a href="/archives" class="menu">
-          归档
-        </a>
-      
-    
-      
-        <a href="/tags" class="menu">
-          标签
-        </a>
-      
-    
-      
-        <a href="/post/about" class="menu">
-          关于
-        </a>
-      
-    
+  
+    <nav class="navbar border fixed split-nav">
+  <div class="nav-brand">
+    <h3><a href="https://Leonhaiwang.github.io">Leon</a></h3>
   </div>
-  <div class="social-container">
-    
-      
-    
-      
-    
-      
-    
-      
-    
-      
-    
+  <div class="collapsible">
+    <input id="collapsible1" type="checkbox" name="collapsible1">
+    <button>
+      <label for="collapsible1">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+      </label>
+    </button>
+    <div class="collapsible-body">
+      <ul class="inline">
+        
+          <li>
+            
+              <a href="/" class="menu">
+                首页
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/archives" class="menu">
+                归档
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/tags" class="menu">
+                标签
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/post/about" class="menu">
+                关于
+              </a>
+            
+          </li>
+        
+      </ul>
+    </div>
   </div>
-</div>
+</nav>
 
-        <div class="post-detail">
-          <article class="post">
-            <h2 class="post-title">
-              ES6
-            </h2>
-            <div class="post-info">
-              <span>
-                2021-03-25
-              </span>
-              <span>
-                63 min read
-              </span>
+    <div id="top" class="row site">
+      <div class="sm-12 md-8 col">
+        <div class="paper">
+          <article class="article">
+            <h1>ES6</h1>
+            <p class="article-meta">
+              2021-03-25
               
-                <a href="https://Leonhaiwang.github.io/tag/TFbKUxkyH/" class="post-tag">
-                  # 前端
+                <a href="https://Leonhaiwang.github.io/tag/TFbKUxkyH/" class="badge secondary">
+                  前端
                 </a>
               
-            </div>
+            </p>
             
-            <div class="post-content-wrapper">
-              <div class="post-content">
-                <!-- more -->
+            <div class="post-content">
+              <!-- more -->
 <p>[toc]</p>
 <h1 id="11-什么是ecma">1.1 什么是ECMA</h1>
 <p>ECMA（European Computer Manufacturers Association）中文名：欧洲计算机制造商协会</p>
@@ -2371,213 +2356,152 @@ console.log(a,b);
 <li><strong>Promise.allSettled()</strong>：将多个实例包装成一个新实例，返回全部实例状态变更后的状态数组(齐变更再返回)</li>
 </ul>
 
-              </div>
-              <div class="toc-container">
-                <ul class="markdownIt-TOC">
-<li><a href="#11-%E4%BB%80%E4%B9%88%E6%98%AFecma">1.1 什么是ECMA</a></li>
-<li><a href="#12-%E4%BB%80%E4%B9%88%E6%98%AFecmascript">1.2 什么是ECMAScript</a></li>
-<li><a href="#21-%E4%B8%A5%E6%A0%BC%E6%A8%A1%E5%BC%8F%E7%9A%84%E7%90%86%E8%A7%A3es5">2.1 严格模式的理解——ES5</a>
-<ul>
-<li><a href="#%E6%A6%82%E5%BF%B5">概念</a></li>
-<li><a href="#%E4%BD%BF%E7%94%A8">使用</a></li>
-<li><a href="#%E8%AF%AD%E6%B3%95%E5%92%8C%E8%A1%8C%E4%B8%BA%E6%94%B9%E5%8F%98">语法和行为改变</a></li>
-</ul>
-</li>
-<li><a href="#22-%E4%B8%A5%E6%A0%BC%E6%A8%A1%E5%BC%8F%E5%92%8C%E6%99%AE%E9%80%9A%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%8C%BA%E5%88%ABes5">2.2 严格模式和普通模式的区别——ES5</a>
-<ul>
-<li><a href="#%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F%E6%98%BE%E7%A4%BA%E5%A3%B0%E6%98%8E">全局变量显示声明</a></li>
-<li><a href="#%E7%A6%81%E6%AD%A2this%E5%85%B3%E9%94%AE%E5%AD%97%E6%8C%87%E5%90%91%E5%85%A8%E5%B1%80%E5%AF%B9%E8%B1%A1">禁止this关键字指向全局对象</a></li>
-<li><a href="#%E7%A6%81%E6%AD%A2%E4%BD%BF%E7%94%A8with%E8%AF%AD%E5%8F%A5">禁止使用with语句</a></li>
-<li><a href="#%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0%E5%BF%85%E9%A1%BB%E9%80%9A%E8%BF%87new%E5%AE%9E%E4%BE%8B%E5%8C%96%E5%AF%B9%E8%B1%A1">构造函数必须通过new实例化对象</a></li>
-</ul>
-</li>
-<li><a href="#31-json%E5%AF%B9%E8%B1%A1es5">3.1 JSON对象——ES5</a></li>
-<li><a href="#41-object%E7%9A%84%E6%89%A9%E5%B1%95es5">4.1 Object的扩展——ES5</a>
-<ul>
-<li><a href="#%E6%96%B9%E6%B3%95%E4%B8%80-objectcreate">方法一 Object.create</a></li>
-<li><a href="#%E6%96%B9%E6%B3%95%E4%BA%8C-objectdefineproperty%E5%92%8Cobjectdefineproperties">方法二 Object.defineProperty和Object.defineProperties</a></li>
-</ul>
-</li>
-<li><a href="#51-%E6%95%B0%E7%BB%84%E7%9A%84%E6%89%A9%E5%B1%95es5">5.1 数组的扩展——ES5</a>
-<ul>
-<li><a href="#%E6%96%B9%E6%B3%951-indexof">方法1 ：indexof</a></li>
-<li><a href="#%E6%96%B9%E6%B3%952lastindexof">方法2：lastIndexOf</a></li>
-<li><a href="#%E6%96%B9%E6%B3%953foreach">方法3：forEach</a></li>
-<li><a href="#%E6%96%B9%E6%B3%954map">方法4：map</a></li>
-<li><a href="#%E6%96%B9%E6%B3%955-filter">方法5： filter</a></li>
-<li><a href="#%E6%96%B9%E6%B3%956every">方法6：every</a></li>
-<li><a href="#%E6%96%B9%E6%B3%957-some">方法7 ：some</a></li>
-<li><a href="#%E6%96%B9%E6%B3%958reduce">方法8：reduce</a></li>
-</ul>
-</li>
-<li><a href="#61%E5%87%BD%E6%95%B0function%E7%9A%84%E6%89%A9%E5%B1%95es5">6.1函数function的扩展——ES5</a></li>
-<li><a href="#71-es6-%E7%9A%84%E5%8F%98%E9%87%8F%E5%A3%B0%E6%98%8E">7.1 ES6  的变量声明</a>
-<ul>
-<li><a href="#var%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F">var：全局变量</a></li>
-<li><a href="#let%E5%AE%9A%E4%B9%89%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F">let：定义局部变量</a></li>
-<li><a href="#const%E5%AE%9A%E4%B9%89%E5%B8%B8%E9%87%8F">const：定义常量</a></li>
-<li><a href="#let-%E5%92%8C-const-%E7%9A%84%E4%BD%9C%E7%94%A8%E9%87%8D%E8%A6%81">let 和 const 的作用【重要】</a></li>
-</ul>
-</li>
-<li><a href="#81%E5%8F%98%E9%87%8F%E7%9A%84%E8%A7%A3%E6%9E%84%E8%B5%8B%E5%80%BC">8.1变量的解构赋值</a>
-<ul>
-<li><a href="#%E6%95%B0%E7%BB%84%E7%9A%84%E8%A7%A3%E6%9E%84%E8%B5%8B%E5%80%BC">数组的解构赋值</a></li>
-<li><a href="#%E5%AF%B9%E8%B1%A1%E7%9A%84%E8%A7%A3%E6%9E%84%E8%B5%8B%E5%80%BC">对象的解构赋值</a></li>
-<li><a href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%A7%A3%E6%9E%84">字符串解构</a></li>
-</ul>
-</li>
-<li><a href="#9-forof%E5%BE%AA%E7%8E%AF">9 for...of循环</a>
-<ul>
-<li><a href="#%E6%95%B0%E7%BB%84%E7%9A%84%E9%81%8D%E5%8E%86">数组的遍历</a></li>
-<li><a href="#map%E5%AF%B9%E8%B1%A1%E7%9A%84%E9%81%8D%E5%8E%86">map对象的遍历</a></li>
-</ul>
-</li>
-<li><a href="#10-%E6%A8%A1%E6%9D%BF%E5%AD%97%E7%AC%A6%E4%B8%B2">10 模板字符串</a></li>
-<li><a href="#11-es6%E5%87%BD%E6%95%B0%E6%89%A9%E5%B1%95">11 ES6函数扩展</a>
-<ul>
-<li><a href="#%E7%AE%AD%E5%A4%B4%E5%87%BD%E6%95%B0-%E9%80%9A%E5%B8%B8%E6%8A%8A%E4%B8%80%E4%B8%AA%E5%87%BD%E6%95%B0%E4%BD%9C%E4%B8%BA%E5%8F%A6%E5%A4%96%E4%B8%80%E4%B8%AA%E5%87%BD%E6%95%B0%E7%9A%84%E5%8F%82%E6%95%B0%E7%9A%84%E6%97%B6%E5%80%99%E4%BD%BF%E7%94%A8">箭头函数----通常把一个函数作为另外一个函数的参数的时候使用</a></li>
-<li><a href="#%E9%BB%98%E8%AE%A4%E5%8F%82%E6%95%B0">默认参数</a></li>
-<li><a href="#%E6%89%A9%E5%B1%95%E8%BF%90%E7%AE%97%E7%AC%A6">扩展运算符</a></li>
-<li><a href="#rest%E8%BF%90%E7%AE%97%E7%AC%A6"><code>rest</code>运算符</a></li>
-<li><a href="#arguments">arguments</a></li>
-</ul>
-</li>
-<li><a href="#12-%E6%96%B0%E5%A2%9E%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B">12 新增基本数据类型</a></li>
-<li><a href="#13-promise">13 Promise</a>
-<ul>
-<li><a href="#%E6%A6%82%E8%BF%B0">概述：</a></li>
-</ul>
-</li>
-<li><a href="#14-async-await">14 async await</a></li>
-<li><a href="#15-%E8%BF%AD%E4%BB%A3%E5%99%A8iterator%E4%B8%8E%E7%94%9F%E6%88%90%E5%99%A8generator">15 迭代器（Iterator）与生成器（Generator）</a>
-<ul>
-<li><a href="#%E8%BF%AD%E4%BB%A3%E5%99%A8">迭代器</a></li>
-<li><a href="#%E7%94%9F%E6%88%90%E5%99%A8">生成器</a></li>
-<li><a href="#%E5%88%9B%E5%BB%BA%E5%8F%AF%E8%BF%AD%E4%BB%A3%E5%AF%B9%E8%B1%A1">创建可迭代对象</a>
-<ul>
-<li><a href="#%E5%86%85%E5%BB%BA%E8%BF%AD%E4%BB%A3%E5%99%A8">内建迭代器</a></li>
-<li><a href="#nodelist-%E8%BF%AD%E4%BB%A3%E5%99%A8">NodeList 迭代器</a></li>
-<li><a href="#%E5%B1%95%E5%BC%80%E8%BF%90%E7%AE%97%E7%AC%A6%E4%B8%8E%E8%BF%AD%E4%BB%A3%E5%99%A8">展开运算符与迭代器</a></li>
-<li><a href="#%E9%AB%98%E7%BA%A7%E8%BF%AD%E4%BB%A3%E5%99%A8%E5%8A%9F%E8%83%BD">高级迭代器功能</a></li>
-<li><a href="#%E5%BC%82%E6%AD%A5%E4%BB%BB%E5%8A%A1%E6%89%A7%E8%A1%8C%E5%99%A8">异步任务执行器</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="#16%E4%BB%A3%E7%90%86proxy">16代理Proxy</a><br>
-*<br>
-*<br>
-* <a href="#%E4%BB%A3%E7%90%86%E7%9A%84%E4%BD%BF%E7%94%A8">代理的使用</a></li>
-<li><a href="#%E5%85%B6%E4%BB%96">其他</a>
-<ul>
-<li><a href="#%E6%B7%B1%E6%8B%B7%E8%B4%9D%E5%92%8C%E6%B5%85%E6%8B%B7%E8%B4%9D%E7%9A%84%E5%8C%BA%E5%88%AB%E4%BB%A5%E5%8F%8A%E5%AE%9E%E7%8E%B0">深拷贝和浅拷贝的区别以及实现</a></li>
-</ul>
-</li>
-<li><a href="#es6-es2020">es6-es2020</a>
-<ul>
-<li><a href="#es2015">es2015</a>
-<ul>
-<li><a href="#const-and-let">const and let</a></li>
-<li><a href="#%E8%A7%A3%E6%9E%84%E8%B5%8B%E5%80%BC">解构赋值</a></li>
-<li><a href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%89%A9%E5%B1%95">字符串扩展</a></li>
-<li><a href="#number%E6%89%A9%E5%B1%95">Number扩展</a></li>
-<li><a href="#object%E6%89%A9%E5%B1%95">Object扩展</a></li>
-<li><a href="#array%E6%89%A9%E5%B1%95">Array扩展</a></li>
-<li><a href="#%E5%87%BD%E6%95%B0%E6%89%A9%E5%B1%95">函数扩展</a></li>
-<li><a href="#symbol">Symbol</a></li>
-<li><a href="#set">Set</a></li>
-<li><a href="#map">Map</a></li>
-<li><a href="#proxy">Proxy</a></li>
-<li><a href="#class">Class</a></li>
-<li><a href="#module">Module</a></li>
-<li><a href="#iterator%E8%BF%AD%E4%BB%A3%E5%99%A8and-generato%E7%94%9F%E6%88%90%E5%99%A8">Iterator迭代器and Generato生成器</a></li>
-<li><a href="#promise">Promise</a></li>
-</ul>
-</li>
-<li><a href="#es2016">es2016</a></li>
-<li><a href="#es2017">es2017</a></li>
-<li><a href="#es2018">es2018</a>
-<ul>
-<li><a href="#%E6%AD%A3%E5%88%99reg">正则reg</a></li>
-</ul>
-</li>
-<li><a href="#es2019">es2019</a></li>
-<li><a href="#es2020">es2020</a>
-<ul>
-<li><a href="#promise-2">Promise</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
-              </div>
             </div>
           </article>
         </div>
-
+        <div class="paper" data-aos="fade-in">
+          
+            <div class="next-post">
+              <div class="next">
+                下一篇
+              </div>
+              <a href="https://Leonhaiwang.github.io/post/vue/">
+                <h3 class="post-title">
+                  vue
+                </h3>
+              </a>
+            </div>
+          
+        </div>
         
-          <div class="next-post">
-            <div class="next">下一篇</div>
-            <a href="https://Leonhaiwang.github.io/post/vue/">
-              <h3 class="post-title">
-                vue
-              </h3>
-            </a>
-          </div>
-        
+      </div>
 
+      <div class="sm-12 md-4 col sidebar">
+  <div class="paper info-container">
+    <img src="https://Leonhaiwang.github.io/images/avatar.png?v=1616680643690" class="no-responsive avatar">
+    <div class="text-muted">It is always day one !</div>
+    <div class="social-container">
+      
         
-
-        <div class="site-footer">
-   <a href="https://github.com/Leonhaiwang" target="_blank">Leon github</a>
-  <a class="rss" href="https://Leonhaiwang.github.io/atom.xml" target="_blank">
-    <i class="ri-rss-line"></i> RSS
-  </a>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      最新文章
+    </div>
+    <div class="row">
+      <ul>
+        
+          
+            <li>
+              <a href="https://Leonhaiwang.github.io/post/wei-lei-he-wei-yuan-su-de-qu-bie-shi-yong-chang-jing/">伪类和伪元素的区别？使用场景？</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://Leonhaiwang.github.io/post/callapplybind-li-jie-ji-shi-xian/">call、apply、bind 理解及实现</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://Leonhaiwang.github.io/post/fang-dou-and-jie-liu/">防抖and节流</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://Leonhaiwang.github.io/post/http-chu-tan/">HTTP 初探</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://Leonhaiwang.github.io/post/tcp-xiang-guan-wen-ti/">TCP相关问题</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://Leonhaiwang.github.io/post/ni-liao-jie-liu-lan-qi-huan-cun-ma/">你了解浏览器缓存嘛？</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://Leonhaiwang.github.io/post/cong-shu-ru-url-dao-ye-mian-jia-zai-fa-sheng-liao-shi-me/">从输入URL到页面加载发生了什么</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://Leonhaiwang.github.io/post/es6/">ES6</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://Leonhaiwang.github.io/post/vue/">vue</a>
+            </li>
+          
+        
+      </ul>
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      标签列表
+    </div>
+    <div class="row">
+      
+        <a href="https://Leonhaiwang.github.io/tag/wBLqdA-6s/" class="badge ">
+          JavaScript
+        </a>
+      
+        <a href="https://Leonhaiwang.github.io/tag/TFbKUxkyH/" class="badge success">
+          前端
+        </a>
+      
+        <a href="https://Leonhaiwang.github.io/tag/UItHKgJej/" class="badge secondary">
+          性能优化
+        </a>
+      
+        <a href="https://Leonhaiwang.github.io/tag/ausBOyWhn/" class="badge warning">
+          计算机网络
+        </a>
+      
+    </div>
+  </div>
+  <div class="paper">
+     <a href="https://github.com/Leonhaiwang" target="_blank">Leon github</a> | <a class="rss" href="https://Leonhaiwang.github.io/atom.xml" target="_blank">RSS</a>
+  </div>
 </div>
 
-      </div>
+
     </div>
 
-    <script>
-      hljs.initHighlightingOnLoad()
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
 
-      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+<script type="application/javascript">
 
-      // This should probably be throttled.
-      // Especially because it triggers during smooth scrolling.
-      // https://lodash.com/docs/4.17.10#throttle
-      // You could do like...
-      // window.addEventListener("scroll", () => {
-      //    _.throttle(doThatStuff, 100);
-      // });
-      // Only not doing it here to keep this Pen dependency-free.
+AOS.init();
 
-      window.addEventListener("scroll", event => {
-        let fromTop = window.scrollY;
+hljs.initHighlightingOnLoad()
 
-        mainNavLinks.forEach((link, index) => {
-          let section = document.getElementById(decodeURI(link.hash).substring(1));
-          let nextSection = null
-          if (mainNavLinks[index + 1]) {
-            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
-          }
-          if (section.offsetTop <= fromTop) {
-            if (nextSection) {
-              if (nextSection.offsetTop > fromTop) {
-                link.classList.add("current");
-              } else {
-                link.classList.remove("current");    
-              }
-            } else {
-              link.classList.add("current");
-            }
-          } else {
-            link.classList.remove("current");
-          }
-        });
-      });
+</script>
 
-    </script>
+
+
+
   </body>
 </html>
