@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Leonhaiwang.github.io</id>
     <title>Leon</title>
-    <updated>2021-03-25T08:50:04.635Z</updated>
+    <updated>2021-03-25T09:02:24.309Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Leonhaiwang.github.io"/>
     <link rel="self" href="https://Leonhaiwang.github.io/atom.xml"/>
@@ -88,7 +88,11 @@
         <link href="https://Leonhaiwang.github.io/post/es6/">
         </link>
         <updated>2021-03-25T08:30:10.000Z</updated>
-        <content type="html"><![CDATA[<p>[toc]</p>
+        <summary type="html"><![CDATA[<figure data-type="image" tabindex="1"><img src="https://Leonhaiwang.github.io/post-images/1616662823163.jpg" alt="" loading="lazy"></figure>
+]]></summary>
+        <content type="html"><![CDATA[<figure data-type="image" tabindex="1"><img src="https://Leonhaiwang.github.io/post-images/1616662823163.jpg" alt="" loading="lazy"></figure>
+<!-- more -->
+<p>[toc]</p>
 <h1 id="11-什么是ecma">1.1 什么是ECMA</h1>
 <p>ECMA（European Computer Manufacturers Association）中文名：欧洲计算机制造商协会</p>
 <h1 id="12-什么是ecmascript">1.2 什么是ECMAScript</h1>
@@ -199,9 +203,9 @@ console.log(a,&quot;a&quot;);
 console.log(b,&quot;b&quot;);
 </code></pre>
 <p>输出以下结果：</p>
-<figure data-type="image" tabindex="1"><img src="C:%5CUsers%5CMaMing%5CDesktop%5Cdemo%5CES6~ES11%5C01README.assets%5Cimage-20200918082752774.png" alt="image-20200918082752774" loading="lazy"></figure>
+<figure data-type="image" tabindex="2"><img src="C:%5CUsers%5CMaMing%5CDesktop%5Cdemo%5CES6~ES11%5C01README.assets%5Cimage-20200918082752774.png" alt="image-20200918082752774" loading="lazy"></figure>
 <p>我们发现输出b里面什么都没有，但我们打开它的<code>__proto__</code>原型就会发现：</p>
-<figure data-type="image" tabindex="2"><img src="C:%5CUsers%5CMaMing%5CDesktop%5Cdemo%5CES6~ES11%5C01README.assets%5Cimage-20200918083032836.png" alt="image-20200918083032836" loading="lazy"></figure>
+<figure data-type="image" tabindex="3"><img src="C:%5CUsers%5CMaMing%5CDesktop%5Cdemo%5CES6~ES11%5C01README.assets%5Cimage-20200918083032836.png" alt="image-20200918083032836" loading="lazy"></figure>
 <p><strong>a对象成为了b的原型</strong></p>
 <hr>
 <p><strong>举例2：</strong>(有第二个参数)<br>
@@ -239,7 +243,7 @@ var c =Object.create(a,{
 console.log(c , &quot;c&quot;);
 </code></pre>
 <p>运行结果：</p>
-<figure data-type="image" tabindex="3"><img src="C:%5CUsers%5CMaMing%5CDesktop%5Cdemo%5CES6~ES11%5C01README.assets%5Cimage-20200918084223539.png" alt="image-20200918084223539" loading="lazy"></figure>
+<figure data-type="image" tabindex="4"><img src="C:%5CUsers%5CMaMing%5CDesktop%5Cdemo%5CES6~ES11%5C01README.assets%5Cimage-20200918084223539.png" alt="image-20200918084223539" loading="lazy"></figure>
 <p>上方代码中，</p>
 <p>我们通过<code>Object.create(prototype,[descriptors])</code>的第二个参数给 <code>c</code> 设置了<code>name</code>、<code>gender</code>、<code>age</code>属性，但是要通过<code>value</code>来设置属性值，属性值默认是不可修改的，要通过<code>writable</code>来设置，这几个关键字解释如下：</p>
 <ul>
@@ -383,7 +387,7 @@ console.log(monitor);
 <pre><code>	Array.prototype.indexof(value)
 </code></pre>
 <p>获取value在数组中的第一个下标，如果没有返回-1</p>
-<figure data-type="image" tabindex="4"><img src="https://upload-images.jianshu.io/upload_images/7047608-5bc57863d5d35991.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/228/format/webp" alt="img" loading="lazy"></figure>
+<figure data-type="image" tabindex="5"><img src="https://upload-images.jianshu.io/upload_images/7047608-5bc57863d5d35991.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/228/format/webp" alt="img" loading="lazy"></figure>
 <h2 id="方法2lastindexof">方法2：lastIndexOf</h2>
 <pre><code>	Array.prototype.lastIndexOf(value)
 </code></pre>
@@ -407,7 +411,7 @@ console.log(monitor);
         console.log(newArr);
 </code></pre>
 <p>运行结果：</p>
-<figure data-type="image" tabindex="5"><img src="C:%5CUsers%5CMaMing%5CDesktop%5Cdemo%5CES6~ES11%5C01README.assets%5Cimage-20200918180149615.png" alt="image-20200918180149615" loading="lazy"></figure>
+<figure data-type="image" tabindex="6"><img src="C:%5CUsers%5CMaMing%5CDesktop%5Cdemo%5CES6~ES11%5C01README.assets%5Cimage-20200918180149615.png" alt="image-20200918180149615" loading="lazy"></figure>
 <h2 id="方法5-filter">方法5： filter</h2>
 <pre><code>Array.prototype.filter(function(item,index){})		//参数2，3可选
 </code></pre>
@@ -420,7 +424,7 @@ console.log(monitor);
         console.log(newArr);
 </code></pre>
 <p>运行结果：</p>
-<figure data-type="image" tabindex="6"><img src="C:%5CUsers%5CMaMing%5CDesktop%5Cdemo%5CES6~ES11%5C01README.assets%5Cimage-20200918183825258.png" alt="image-20200918183825258" loading="lazy"></figure>
+<figure data-type="image" tabindex="7"><img src="C:%5CUsers%5CMaMing%5CDesktop%5Cdemo%5CES6~ES11%5C01README.assets%5Cimage-20200918183825258.png" alt="image-20200918183825258" loading="lazy"></figure>
 <h2 id="方法6every">方法6：every</h2>
 <pre><code>Array.prototype.every(function(element,index,array){});
 </code></pre>
@@ -475,7 +479,7 @@ console.log(monitor);
         console.log(result1);
 </code></pre>
 <p>运行结果：</p>
-<figure data-type="image" tabindex="7"><img src="C:%5CUsers%5CMaMing%5CDesktop%5Cdemo%5CES6~ES11%5C01README.assets%5Cimage-20200919085223262.png" alt="image-20200919085223262" loading="lazy"></figure>
+<figure data-type="image" tabindex="8"><img src="C:%5CUsers%5CMaMing%5CDesktop%5Cdemo%5CES6~ES11%5C01README.assets%5Cimage-20200919085223262.png" alt="image-20200919085223262" loading="lazy"></figure>
 <ol>
 <li>prev: 第一项的值或上一次叠加的结果值</li>
 <li>cur: 当前会参与叠加的项</li>
@@ -1046,7 +1050,7 @@ undefined &quot;arg[3]&quot;
         fn1()
 </code></pre>
 <p>运行结果：（先只看length）</p>
-<figure data-type="image" tabindex="8"><img src="C:%5CUsers%5CMaMing%5CDesktop%5Cdemo%5CES6~ES11%5C01README.assets%5Cimage-20200921152825151.png" alt="image-20200921152825151" loading="lazy"></figure>
+<figure data-type="image" tabindex="9"><img src="C:%5CUsers%5CMaMing%5CDesktop%5Cdemo%5CES6~ES11%5C01README.assets%5Cimage-20200921152825151.png" alt="image-20200921152825151" loading="lazy"></figure>
 <p>在没有传递任何参数的时候，arguments的length为0，或许我们已经猜到Arguments的作用是什么了。</p>
 <p>没错，<strong>arguments是用来记录当前函数传递的实参的</strong></p>
 <p>我们再来看一个例子：</p>
@@ -1062,7 +1066,7 @@ undefined &quot;arg[3]&quot;
 <p>函数<code>fn2</code>才设置了一个形参a，但是我们传递了五个参数。</p>
 <p>这时候我不止想获取到a，我还想把其他四个参数获取到，就可以用到<code>arguments</code>.</p>
 <p>运行结果：</p>
-<figure data-type="image" tabindex="9"><img src="C:%5CUsers%5CMaMing%5CDesktop%5Cdemo%5CES6~ES11%5C01README.assets%5Cimage-20200921155347879.png" alt="image-20200921155347879" loading="lazy"></figure>
+<figure data-type="image" tabindex="10"><img src="C:%5CUsers%5CMaMing%5CDesktop%5Cdemo%5CES6~ES11%5C01README.assets%5Cimage-20200921155347879.png" alt="image-20200921155347879" loading="lazy"></figure>
 <p>我们可以看到，arguments像一个数组一样把所有的参数都保存了下来，</p>
 <p>然而arguments并不是一个数组，<strong>arguments是一个类似数组（类数组）</strong></p>
 <br>
@@ -1639,7 +1643,7 @@ hobby run
     &lt;/script&gt;
 </code></pre>
 <p>打印结果：</p>
-<figure data-type="image" tabindex="10"><img src="C:%5CUsers%5CMaMing%5CDesktop%5Cdemo%5CES6~ES11%5C01README.assets%5Cimage-20200924165418693.png" alt="image-20200924165418693" loading="lazy"></figure>
+<figure data-type="image" tabindex="11"><img src="C:%5CUsers%5CMaMing%5CDesktop%5Cdemo%5CES6~ES11%5C01README.assets%5Cimage-20200924165418693.png" alt="image-20200924165418693" loading="lazy"></figure>
 <h3 id="展开运算符与迭代器">展开运算符与迭代器</h3>
 <pre><code class="language-js">        var a =[1,2,3]
         var b =[4,5,6]
@@ -1853,9 +1857,9 @@ hobby run
 <p><strong>基本数据类型的存储方式——名、值都储存在栈内存中</strong></p>
 <p>相当于没有所谓的指向堆地址一说</p>
 <p>例如let a = 1;</p>
-<figure data-type="image" tabindex="11"><img src="https://images2018.cnblogs.com/blog/1213309/201711/1213309-20171124130901890-511917244.jpg" alt="img" loading="lazy"></figure>
+<figure data-type="image" tabindex="12"><img src="https://images2018.cnblogs.com/blog/1213309/201711/1213309-20171124130901890-511917244.jpg" alt="img" loading="lazy"></figure>
 <p>当你b=a复制时，栈内存会新开一个内存，例如这样：</p>
-<figure data-type="image" tabindex="12"><img src="https://images2018.cnblogs.com/blog/1213309/201711/1213309-20171124131822437-430949998.jpg" alt="img" loading="lazy"></figure>
+<figure data-type="image" tabindex="13"><img src="https://images2018.cnblogs.com/blog/1213309/201711/1213309-20171124131822437-430949998.jpg" alt="img" loading="lazy"></figure>
 <p>a和b现在没有任何关联，所以修改a的时候，b完全不受影响。</p>
 <p>但是这算不上是深拷贝，深拷贝只针对较为复杂的引用数据类型Object。</p>
 <p><strong>引用数据类型的存储方式——名和值分开放，名存在栈内存中，值存在堆内存中，但是栈内存会放一个引用的地址指向相应的堆内存</strong></p>
@@ -1868,15 +1872,15 @@ a[0]=1;
 console.log(a,b);
 </code></pre>
 <p>运行结果：</p>
-<figure data-type="image" tabindex="13"><img src="https://images2018.cnblogs.com/blog/1213309/201711/1213309-20171124114023703-1953539844.png" alt="img" loading="lazy"></figure>
+<figure data-type="image" tabindex="14"><img src="https://images2018.cnblogs.com/blog/1213309/201711/1213309-20171124114023703-1953539844.png" alt="img" loading="lazy"></figure>
 <p>我们看到b复制了a之后，把a进行修改，b却也跟着改变了，是因为b复制的只是a的引用地址，二者的值其实是同一个</p>
-<figure data-type="image" tabindex="14"><img src="https://images2018.cnblogs.com/blog/1213309/201711/1213309-20171124133428359-1292133331.jpg" alt="img" loading="lazy"></figure>
+<figure data-type="image" tabindex="15"><img src="https://images2018.cnblogs.com/blog/1213309/201711/1213309-20171124133428359-1292133331.jpg" alt="img" loading="lazy"></figure>
 <p>以上是a的存储方式</p>
-<figure data-type="image" tabindex="15"><img src="https://images2018.cnblogs.com/blog/1213309/201711/1213309-20171124133647796-1390255671.jpg" alt="img" loading="lazy"></figure>
+<figure data-type="image" tabindex="16"><img src="https://images2018.cnblogs.com/blog/1213309/201711/1213309-20171124133647796-1390255671.jpg" alt="img" loading="lazy"></figure>
 <p>当b=a进行拷贝的时候，其实复制的只是a的引用地址，并非堆内存里面的值</p>
-<figure data-type="image" tabindex="16"><img src="https://images2018.cnblogs.com/blog/1213309/201711/1213309-20171124133934328-67216865.jpg" alt="img" loading="lazy"></figure>
+<figure data-type="image" tabindex="17"><img src="https://images2018.cnblogs.com/blog/1213309/201711/1213309-20171124133934328-67216865.jpg" alt="img" loading="lazy"></figure>
 <p>而当我们使<code>a[0]=1</code>进行修改时，由于a和b指向的是同一个地址，所以b自然也收了影响，这就是所谓的浅拷贝</p>
-<figure data-type="image" tabindex="17"><img src="https://images2018.cnblogs.com/blog/1213309/201711/1213309-20171124140906203-2099568933.jpg" alt="img" loading="lazy"></figure>
+<figure data-type="image" tabindex="18"><img src="https://images2018.cnblogs.com/blog/1213309/201711/1213309-20171124140906203-2099568933.jpg" alt="img" loading="lazy"></figure>
 <p>如果给b也开辟一个堆内存存放值的话，像基本类型那样，就达到深拷贝的效果了</p>
 <p>那么如何实现深拷贝呢</p>
 <p><strong>1.递归实现深拷贝</strong></p>
@@ -1930,7 +1934,7 @@ a[0]=1;
 a[2][0]=1;
 console.log(a,b);
 </code></pre>
-<figure data-type="image" tabindex="18"><img src="https://images2018.cnblogs.com/blog/1213309/201711/1213309-20171124154610578-1742013996.png" alt="img" loading="lazy"></figure>
+<figure data-type="image" tabindex="19"><img src="https://images2018.cnblogs.com/blog/1213309/201711/1213309-20171124154610578-1742013996.png" alt="img" loading="lazy"></figure>
 <p><strong>3.除此之外，还有jquery提供的$.extend()方法</strong></p>
 <p><strong>jQuery.extend(<em>[deep]</em>, target, object1, <em>[objectN]</em>)</strong></p>
 <h1 id="es6-es2020">es6-es2020</h1>
