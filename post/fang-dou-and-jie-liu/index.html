@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>防抖and节流 | Leon</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://Leonhaiwang.github.io/favicon.ico?v=1616663998434">
+<link rel="stylesheet" href="https://Leonhaiwang.github.io/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="防抖节流
+性能优化
+防抖
+在第一次执行函数的时候，给定一个值，如果在这个时间内没有再次触发，就执行，否则当前计时取消，重新开始计时
+任务频繁触发的情况下，只有任务触发间隔超过了指定的间隔的时候，任务才会执行。
+//防抖---某个时间段内只处..." />
+    <meta name="keywords" content="性能优化,JavaScript" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://Leonhaiwang.github.io">
+        <img src="https://Leonhaiwang.github.io/images/avatar.png?v=1616663998434" class="site-logo">
+        <h1 class="site-title">Leon</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      It is always day one !
+    </div>
+    <div class="site-footer">
+       <a href="https://github.com/Leonhaiwang" target="_blank">Leon github</a> | <a class="rss" href="https://Leonhaiwang.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">防抖and节流</h2>
+            <div class="post-date">2021-03-25</div>
+            
+              <div class="feature-container" style="background-image: url('https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fwxt.sinaimg.cn%2Flarge%2F007XivJ0gy1g7gzbchfxmj31pe0gcab7.jpg&amp;refer=http%3A%2F%2Fwxt.sinaimg.cn&amp;app=2002&amp;size=f9999,10000&amp;q=a80&amp;n=0&amp;g=0n&amp;fmt=jpeg?sec=1619255845&amp;t=7afc83a0c39a5e0cb9ae748b106724bb')">
+              </div>
+            
+            <div class="post-content" v-pre>
+              <h1 id="防抖节流">防抖节流</h1>
+<p>性能优化</p>
+<h2 id="防抖">防抖</h2>
+<p>在第一次执行函数的时候，给定一个值，如果在这个时间内没有再次触发，就执行，否则当前计时取消，重新开始计时</p>
+<p>任务频繁触发的情况下，只有任务触发间隔超过了指定的间隔的时候，任务才会执行。</p>
+<pre><code class="language-js">//防抖---某个时间段内只处理一次
+    function debounce(fn,delay){
+      let timer = null;
+      return function(){
+        //每次点击的时候将前一个定时器清除
+        clearTimeout(timer);
+        timer = setTimeout(()=&gt;{
+          fn.call(this,arguments)
+        },delay)
+      }
+    }
+</code></pre>
+<h2 id="节流">节流</h2>
+<p>指定的时间内只会执行一次</p>
+<ul>
+<li>懒加载监听滚动条的位置，使用节流函数按照一定的时间频率获取</li>
+<li>用户点击提交，使用节流，只允许一定时间内执行一次</li>
+<li>TIPS：为什么需要节流？
+<ul>
+<li>一些操作可能会造成浏览器回流，造成过多的损耗，使用节流来防止这种情况</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-js">function throttle(fn,delay){
+      let canRun = true;//闭包
+      return function(){
+        if(!canRun)return 
+        //防止执行之前 再被执行
+        canRun = false
+        setTimeout(()=&gt;{
+          fn.call(this,arguments);
+          canRun = true
+        },delay)
+      }
+    }
+</code></pre>
+<p>节流还可以利用时间戳，差值是否大于指定间隔</p>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://Leonhaiwang.github.io/tag/UItHKgJej/" class="tag">
+                    性能优化
+                  </a>
+                
+                  <a href="https://Leonhaiwang.github.io/tag/wBLqdA-6s/" class="tag">
+                    JavaScript
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://Leonhaiwang.github.io/post/http-chu-tan/">
+                  <h3 class="post-title">
+                    HTTP 初探
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+
+  </body>
+</html>

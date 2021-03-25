@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Leonhaiwang.github.io</id>
     <title>Leon</title>
-    <updated>2021-03-25T09:09:37.079Z</updated>
+    <updated>2021-03-25T09:20:03.055Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Leonhaiwang.github.io"/>
     <link rel="self" href="https://Leonhaiwang.github.io/atom.xml"/>
@@ -10,6 +10,730 @@
     <logo>https://Leonhaiwang.github.io/images/avatar.png</logo>
     <icon>https://Leonhaiwang.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, Leon</rights>
+    <entry>
+        <title type="html"><![CDATA[call、apply、bind 理解及实现]]></title>
+        <id>https://Leonhaiwang.github.io/post/callapplybind-li-jie-ji-shi-xian/</id>
+        <link href="https://Leonhaiwang.github.io/post/callapplybind-li-jie-ji-shi-xian/">
+        </link>
+        <updated>2021-03-25T09:18:26.000Z</updated>
+        <content type="html"><![CDATA[<p>三个方法都能改变this的内部指向。</p>
+<h2 id="call">call()</h2>
+<p>call是属于所有function的方法，也就是Function.prototype.call</p>
+<pre><code class="language-js">fun.call(thisArg[,arg1[,arg2,…]]);
+</code></pre>
+<p>可以让call中的对象调用当前对象所拥有的Function</p>
+<pre><code class="language-js">function a(){
+    //输出函数a中的this对象
+    console.log(this); 
+}
+//定义函数b
+function b(){} 
+
+var obj = {name:'这是一个屌丝'}; //定义对象obj
+a.call(); //window
+a.call(null); //window
+a.call(undefined);//window
+a.call(1); //Number
+a.call(''); //String
+a.call(true); //Boolean
+a.call(b);// function b(){}
+a.call(obj); //Object
+</code></pre>
+<h2 id="apply">apply()</h2>
+<p>apply<code>也是属于所有</code>Function<code>的方法，也就是</code>Function.prototype.apply</p>
+<pre><code>fun.apply(thisArg, [argsArray]);
+</code></pre>
+<p><code>thisArg</code>就是<code>this</code>指向，<code>argsArray</code>是指定的参数数组</p>
+<p>call参数是一个列表，将每个参数一个一个列出来。</p>
+<p>apply参数是一个数组，将每个参数放在一个数组中</p>
+<pre><code class="language-js">function jsy(x,y,z){
+    console.log(x,y,z);
+}
+
+jsy.apply(null,[1,2,3]); 
+// 1 2 3
+</code></pre>
+<h2 id="bind">bind()</h2>
+<p>bind方法创建一个新的函数，当被调用的时候，将其this关键字设置为提供的值，在调用新函数的时候，在任何提供之前提供一个给定的参数序列</p>
+<pre><code>fun.bind(thisArg[, arg1[, arg2[, ...]]])
+</code></pre>
+<p>bind会创建一个新的函数（绑定函数），原函数的一个拷贝，不会像call和apply一样立即执行-返回函数的引用</p>
+<h2 id="总结">总结：</h2>
+<ul>
+<li>三者都是用来改变函数的this指向的，第一个参数都是this指向的对象。</li>
+<li>bing是返回一个函数后可稍后执行，call/apply是立即调用</li>
+<li>都可以给定参数传递</li>
+<li>call给定参数需要将参数全部列出，apply给定参数组</li>
+</ul>
+<h2 id="模拟实现">模拟实现</h2>
+<h3 id="call-2">call()</h3>
+<p>call函数改变了this的指向，给传入的对象添加属性方法之后再删除</p>
+<ol>
+<li>将函数设为对象的属性</li>
+<li>执行该函数</li>
+<li>删除该函数</li>
+</ol>
+<pre><code class="language-js"> Function.prototype.call3 = function(context){
+      //传值null的时候this指向window
+      var context = context||window
+      context.fn = this
+      //循环arguments的值，除了第一项保存在args数组中
+      var args = []
+      for(i = 1,len = arguments.length;i&lt;len;i++){
+        args.push('arguments['+i+']')
+      }
+      //把args参数数组放到要执行的函数里面
+      var result = eval('context.fn('+args+')')
+      //返回值
+      delete context.fn
+      return result
+    }
+    var value = 2;
+    var obj = {
+        value: 1
+    }
+   function bar(name, age) {
+        console.log(this.value);
+        return {
+            value: this.value,
+            name: name,
+            age: age
+        }
+    }
+    bar.call3(null)
+    bar.call3(obj,&quot;name&quot;,45)
+</code></pre>
+<pre><code class="language-js">    //this为调用的函数
+    //context是参数对象
+    Function.prototype.myCall = function(context){
+      //判断调用者是否是一个函数
+      if(typeof this !='function'){
+        throw new Error('this is a error')
+      }
+      //不传参数默认为window
+      context = context||window
+      //将值设置为需要调用的函数
+      context.fn = this
+      //将arguments转化为数组，将要用的值提取出来
+      let args  = [...arguments].slice(1)
+      // 传参调用函数
+      const result = context.fn(...args)    
+      //删除函数
+      delete context.fn
+      //返回执行结果
+      return result
+    }
+    function print(age){
+      console.log(this.name + age)
+    }
+    var obj = {
+      name:'LiHui'
+    }
+    print.myCall(obj,11)
+</code></pre>
+<h3 id="apply-2">apply()</h3>
+<p>apply实现方法和call相似，不同的就是在apply中传过来的参数就是一个数组，这里要把传过来的数组遍历，执行fn函数。中间需要添加传入的值是否是数组的判断</p>
+<pre><code class="language-js">Function.prototype.apply1 = function(context,arr){
+      var context = Object(context)||window
+      context.fn = this
+      var result;
+      if(!arr){
+        result = context.fn
+      }
+      else{
+        var args = []
+        for(var i = 0;i&lt;arr.length;i++){
+          args.push('arr['+i+']')
+        }
+        result = eval('context.fn('+args+')')
+      }
+      delete context.fn
+      return result
+    }
+</code></pre>
+<pre><code class="language-js">	Function.prototype.myApply = function(context){
+      if(typeof this != 'function'){
+        throw new Error('is not a function')
+      }
+      context = context || window
+      context.fn = this
+      let result;
+      if(arguments[1]){
+        result = context.fn(...arguments[1])
+      }else{
+        result = context.fn()
+      }
+      delete context.fn
+      return result
+    }
+    function print(age){
+      console.log(this.name + &quot; &quot;+age)
+    }
+    var obj = {
+      name:'name'
+    }
+    print.myApply(obj,[12])
+</code></pre>
+<h3 id="bind-2">bind()</h3>
+<pre><code class="language-js">Function.prototype.myBind = function(context){
+      //判断调用者是否为函数
+      if(typeof this!='function'){
+        throw new Error('must be a function')
+      }
+      //截取传递的参数
+      const args = [...arguments].slice(1)
+      //_this指向调用的函数
+      const _this = this
+        //返回一个函数
+       return function F(){
+         //判断this是不是 new F()实例，因为new不会被任何方式改变this
+         if(this instanceof F){
+           return new _this(...args,...arguments)
+         }else{
+           return _this.apply(context,args.concat(...arguments))
+         }
+       }
+    }
+    function print(age){
+      console.log(this.name+ &quot;-&quot; +age)
+    }
+    var obj = {
+      name:&quot;name&quot;
+    }
+    print.myBind(obj,123)()
+</code></pre>
+<h4 id="不用callapply实现bind">不用call(),apply()实现bind()</h4>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[防抖and节流]]></title>
+        <id>https://Leonhaiwang.github.io/post/fang-dou-and-jie-liu/</id>
+        <link href="https://Leonhaiwang.github.io/post/fang-dou-and-jie-liu/">
+        </link>
+        <updated>2021-03-25T09:16:29.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="防抖节流">防抖节流</h1>
+<p>性能优化</p>
+<h2 id="防抖">防抖</h2>
+<p>在第一次执行函数的时候，给定一个值，如果在这个时间内没有再次触发，就执行，否则当前计时取消，重新开始计时</p>
+<p>任务频繁触发的情况下，只有任务触发间隔超过了指定的间隔的时候，任务才会执行。</p>
+<pre><code class="language-js">//防抖---某个时间段内只处理一次
+    function debounce(fn,delay){
+      let timer = null;
+      return function(){
+        //每次点击的时候将前一个定时器清除
+        clearTimeout(timer);
+        timer = setTimeout(()=&gt;{
+          fn.call(this,arguments)
+        },delay)
+      }
+    }
+</code></pre>
+<h2 id="节流">节流</h2>
+<p>指定的时间内只会执行一次</p>
+<ul>
+<li>懒加载监听滚动条的位置，使用节流函数按照一定的时间频率获取</li>
+<li>用户点击提交，使用节流，只允许一定时间内执行一次</li>
+<li>TIPS：为什么需要节流？
+<ul>
+<li>一些操作可能会造成浏览器回流，造成过多的损耗，使用节流来防止这种情况</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-js">function throttle(fn,delay){
+      let canRun = true;//闭包
+      return function(){
+        if(!canRun)return 
+        //防止执行之前 再被执行
+        canRun = false
+        setTimeout(()=&gt;{
+          fn.call(this,arguments);
+          canRun = true
+        },delay)
+      }
+    }
+</code></pre>
+<p>节流还可以利用时间戳，差值是否大于指定间隔</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[HTTP 初探]]></title>
+        <id>https://Leonhaiwang.github.io/post/http-chu-tan/</id>
+        <link href="https://Leonhaiwang.github.io/post/http-chu-tan/">
+        </link>
+        <updated>2021-03-25T09:13:58.000Z</updated>
+        <content type="html"><![CDATA[<p>web是建立在http之上的。</p>
+<p>HTTP协议定义web客户端如何从web服务器请求web页面，以及服务器如何把web页面发送给客户端。</p>
+<p>http请求/响应模型。</p>
+<p>客户端向服务器发送一个请求报文，请求报文包含请求的方法，URL，协议版本，请求头部和请求数据。</p>
+<p>服务器以一个状态行作为响应，响应的内容包括协议版本，成功/错误代码，服务器信息，响应头部和响应数据</p>
+<p>HTTP是不保存状态协议，无状态协议。协议本身对于请求或响应之间的通信状态不进行保存，因此连接双方不能知晓对方当前的身份和状态，。</p>
+<p>cookie可以进行客户端的状态管理。浏览器会根据从服务端发送的响应报文内set-cookie首部字段信息自动保持Cookie，每次客户端发送HTTP请求，都会在请求报文中携带cookie，作为服务端识别客户端身份的标识。</p>
+<h2 id="http协议简介">HTTP协议简介</h2>
+<h3 id="串行连接">串行连接：</h3>
+<p>http串行连接：每次只能处理一个请求，收到响应后立即断开连接。http1.0中每次都要断开TCP连接重新连。每次都需要建立新的TCP连接三次握手四次回收，浪费通信开销</p>
+<h3 id="持久连接">持久连接：</h3>
+<p>为了解决串行连接的问题，一定时间内，同一域名下的http请求，只要两端都没有断开连接，则保持TCP连接状态。http1.1默认所有的连接都是持久连接，客户端发起多个请求的时候就减少了建立TCP连接的网络资源和通信时间的浪费。但是这种会造成阻塞模式（下次请求必须在上次请求返回后才能发起）</p>
+<h3 id="管道化连接">管道化连接：</h3>
+<p>管道化可以不用等待响应返回 而发送下个请求，并按顺序返回响应。</p>
+<h3 id="http20多路复用">HTTP2.0多路复用：</h3>
+<p>每个http请求都有一个序列标识符，这样浏览器可以并发多个请求。服务器收到数据后，根据序列号重新排序成不同的请求报文，不会导致数据错乱。服务端可以并发返回多个响应给浏览器，浏览器收到以后根据序列标识重新排序并归入各自的请求的响应报文。并且同一个域名下的所有的请求都复用同一个TCP连接，增加了处理器触发并发的上限。</p>
+<h3 id="websocket">webSocket</h3>
+<p>客户端服务端通讯的全双工协议，由客户端发起，建立连接以后不仅客户端可以主动向服务器发送请求，服务端也可以主动向客户端推送信息。</p>
+<h2 id="http版本">HTTP版本</h2>
+<p>1.0：每次请求都打开一个新的TCP连接。</p>
+<p>1.1：允许范围请求，在请求的头部加上Range，请求消息和响应消息都必须包含Host头部，区分一个物理主机中的不同的虚拟主机域名。默认开启持久连接，在一个Tcp连接上可以传输多个HTTP响应和请求。</p>
+<h3 id="20多路复用">2.0：多路复用</h3>
+<p>帧（frame）：代表数据传输的最小单位，每个帧都有序列标识表明该帧属于哪个流</p>
+<p>流（stream）：多个帧组成的数据流，表示一个请求。</p>
+<ul>
+<li>新的基于2进制的格式：http2采用基于二进制格式，</li>
+<li>多路复用：是持久连接的升级版。多路复用，就是在一个TCP连接中可以存在多条流，发送 多个请求，通过重新排序还原请求。-----允许并发的发起多个请求，每个请求以及该请求的想用不需要等待其他的请求或者响应，避免了线头阻塞。</li>
+<li>头部压缩：HTTP1的请求和响应头部带有大量的信息，每次都要重复发送。HTTP2使用encoder减少需要传输的头部大小，<strong>通讯双方各有一份cache头部field表，避免了头部的重复传输，减少了需要传输的大小</strong></li>
+<li>服务端推送：这里的服务器推送指客户端需要的css/js/img伴随着index.html一起发送的到客户端，避免了重新请求，</li>
+</ul>
+<h3 id="30">3.0：</h3>
+<p>在http2中，</p>
+<ul>
+<li>（队头堵塞）多个请求公用一个TCP，一旦出现丢包，就需要所有的请求都要等待。</li>
+<li>TCP以及Tcp+TLs的延时。http2使用tcp进行传输，使用https还要使用TLS传输，TLS也需要握手。</li>
+</ul>
+<p>基于UDP-----&gt;QUIC</p>
+<p>多路复用、0-RTT、使用 TLS1.3 加密、流量控制、有序交付、重传</p>
+<ul>
+<li>
+<p>实现了类似TCP的流浪控制，传输可靠性，QUIC在UDP基础上增加了一层保证数据可靠性的传输。</p>
+</li>
+<li>
+<p>实现了快速握手的功能：QUIC可以使用0-RTT或者1-RTT来建立连接，最快的速度发送和接受数据。</p>
+</li>
+<li>
+<p>TLS1.3加密：减少握手所花费的RTT个数</p>
+</li>
+<li>
+<p>多路复用：解决TCP中队头堵塞，多个独立的数据流。</p>
+</li>
+<li>
+<p>避免包阻塞：多个数据包在TCP上传输时，若一个流中的数据包传输出现问题，TCP需要等待该包重新传后才能继续传输其他的包。</p>
+<ul>
+<li>在QUIC中不同的流之间的数据传输真正实现了相互独立无干扰，某个流的数据包在出现问题时，并不会对其他的数据包产生影响</li>
+</ul>
+</li>
+<li>
+<p>快速重启会话：普通传输，基于tCP，基于两端ip和端口协议建立的，在网络切换场景，流量---&gt;wifi.必须重新连接。QUIC使用UUID标记每一次连接，只要UUID不变，不会需要握手。</p>
+</li>
+</ul>
+<h2 id="url-and-uri">URL and URI</h2>
+<p>URI：统一资源标识符---标识一个具体的资源</p>
+<p>URL：统一资源定位符---定位具体的资源的，标识了一个资源的具体位置（互联网通过URI来传输数据和建立连接）</p>
+<h2 id="http报文">HTTP报文</h2>
+<h3 id="请求报文">请求报文</h3>
+<p>请求行（请求方法，协议版本），请求首部（URI，客户端信息），内容实体（用户信息，资源信息）</p>
+<h3 id="响应报文">响应报文</h3>
+<p>状态行（协议版本，状态码），响应首部（服务器名称，资源标识等），内容实体（服务器返回的信息）</p>
+<h3 id="请求方法">请求方法</h3>
+<ul>
+<li>get：请求服务器资源</li>
+<li>POST：传输实体主体</li>
+<li>PUT：传输文件</li>
+<li>delete：删除文件</li>
+<li>head：获取报文首部，不返回主体</li>
+<li>options：询问请求URI资源支持的方法</li>
+</ul>
+<h3 id="常用的状态码">常用的状态码：</h3>
+<ul>
+<li>2：成功。表明请求被正常处理了
+<ul>
+<li>200：从客户端发来请求在服务端被正确处理</li>
+<li>204：请求成功，但是响应报文不包含实体主体部分</li>
+<li>206：进行范围请求成功</li>
+</ul>
+</li>
+<li>3：重定向。浏览器要执行特殊处理
+<ul>
+<li>301：永久性重定向：资源已经被分配到了新的URL</li>
+<li>302：临时性重定向：资源临时被分配到了新的URL</li>
+<li>303：资源存在另外一个URL。应使用GET方法获取资源。（301.302.303响应，所有的浏览器都会删除报文主体，并且重新GET请求）</li>
+<li>304：服务器允许访问资源。但请求未满足条件</li>
+<li>307：临时重定向。与320相同，但是期望客户端保持请求方法不变向新的地址发出请求</li>
+</ul>
+</li>
+<li>4：客户端错误。
+<ul>
+<li>400：请求报文存在语法错误</li>
+<li>401：发送的请求需要有通过Http认证的认证信息</li>
+<li>403：对请求资源的访问服务器拒绝，可以在实例主体部分返回原因描述。</li>
+<li>404：服务器上没有找到请求的资源</li>
+</ul>
+</li>
+<li>5：服务器错误
+<ul>
+<li>500：服务器在执行请求的时候发生了错误</li>
+<li>501：表示服务器不支持当前请求所需要的某个功能</li>
+<li>503：服务器暂时处于超负荷状态。无法处理请求</li>
+</ul>
+</li>
+</ul>
+<h3 id="首部字段">首部字段</h3>
+<p>Cache-Control：控制缓存的行为。</p>
+<p>Connection：浏览器想要优先使用的连接类型： <code>keep-alive close</code>（开启和关闭持久连接）</p>
+<p>Date：创建报文的时间</p>
+<h3 id="两种请求">两种请求：</h3>
+<p>前端进行CORS请求（跨域），分为简单请求和复杂请求</p>
+<h4 id="简单请求">简单请求：</h4>
+<ul>
+<li>请求方法为get，post，head，</li>
+<li>无自定义请求头</li>
+<li><code>Content-Type</code>只能是这几种：text/plain<code></code>multipart/form-data<code></code>application/x-www-form-urlencoded</li>
+</ul>
+<h4 id="复杂请求">复杂请求：</h4>
+<ul>
+<li>put，delete发送的ajax请求</li>
+<li>发送JSON格式的ajax请求（post）</li>
+<li>带自定义的ajax请求</li>
+</ul>
+<p>如果是复杂的请求就会发送一个option请求，（预检请求）</p>
+<h2 id="web服务器">WEB服务器</h2>
+<p>代理服务器就是客户端和服务端之间的‘中间商’，即http通过代理服务器转发给服务器，再把服务器的响应返回给客户端的行为。代理服务器可以做缓存服务器。可以用来隐藏用户身份（正向代理）服务器身份（反向代理）增加安全性</p>
+<h3 id="正向代理">正向代理：</h3>
+<p>从客户端角度出发，为了从源服务器中取得内容，由客户端向代理服务器发送请求，并执行访问目标服务器。然后代理服务器向源服务器提交需要，并将获得的内容返回给客户端。（正向代理隐藏真正的客户端，服务端不知道真正的请求客户是谁 ）</p>
+<h3 id="反向代理">反向代理：</h3>
+<p>从客户端向反向代理发出请求，反向代理服务器收到需求以后判断请求走向哪里，再将结果返回给客户端，。我们不知到真正的服务器是谁，只知道反向代理服务器是谁就好了。</p>
+<h4 id="反向代理解决跨域问题">反向代理解决跨域问题：</h4>
+<p>项目本身启动需要一个端口：会产生跨域问题。在使用webpack做构建工具的项目中经常使用proxyTable代理实现跨域。</p>
+<p>流程：</p>
+<ul>
+<li>本地服务器在浏览器向本地服务发起请求</li>
+<li>本地代理转发</li>
+<li>目标服务器</li>
+<li>响应数据后通过代理伪装成本地服务器请求的返回值</li>
+<li>浏览器接受到目标服务器的数据。</li>
+</ul>
+<p>vue-cli反向代理配置：</p>
+<pre><code class="language-vue">//vue.config.js
+  ......
+  devServer: {
+    port: 8080, // 配置端口
+    open: true, // 项目启动自动开启浏览器
+    compress: true, // 开启压缩
+    overlay: { // 设置让浏览器 overlay 同时显示警告和错误
+      warnings: true,
+      errors: true
+    },
+    // 设置请求反向代理
+    proxy: {
+      '/api': { // 要代理的接口的匹配字符
+        target: process.env.BASE_URL, // 接口域名
+        secure: false,
+        changeOrigin: true
+      }
+    }
+  },
+  ......
+
+</code></pre>
+<p>注意：如果要使用反向代理，在axios的时候，请求baseUrl必须设置字符串‘/’，否则proxy会匹配不到‘/api’代理失败</p>
+<h3 id="缓存服务器">缓存服务器：</h3>
+<p>将用户需要频繁访问的网络内容放在离用户较近的访问速度较快的服务器总，以提高内存访问速度的一种技术。</p>
+<p>浏览器先想中间缓存服务器发送HTTP请求，经过处理后，在将请求发送到原服务区</p>
+<h2 id="https">HTTPS</h2>
+<p>基于HTTP，通过SSL或者TLS，提供加密处理数据，验证对方的身份以及数据完整性 保护</p>
+<ul>
+<li>内容加密：采用混合技术加密，中间者无法直接查看明文</li>
+<li>验证身份：通过证书认证客户端访问的是自己的服务器</li>
+<li>保护数据完成性：防止传输的内容被中间冒充篡改。</li>
+</ul>
+<p>加密</p>
+<h3 id="对称加密">对称加密：</h3>
+<p>唯一密钥可以加密也可以解密</p>
+<h3 id="非对称加密">非对称加密</h3>
+<p>公钥加密私钥解密。服务端会生成一对密钥，一个只能自己知道用于解密。客户端的明文通过公钥加密后要用私钥解密。</p>
+<h3 id="混合加密">混合加密：</h3>
+<p>服务端用非对称的加密的私钥加密 对称加密的密钥key，传给客户端，客户端使用非对称加密的公钥解密出堆成加密的key，双方都有了key，用key传输。-------（较慢）</p>
+<h3 id="ssl">SSL：</h3>
+<p>获取证书（证书：证书签名+服务端公钥），在客户端发起HTTP请求的时候，服务端将证书发送给客户端。客户端认证证书的真伪，解密出服务端公钥key，用公钥加密自己生成的对称密钥key1发送给服务端，最后利用key1加密进行通过。</p>
+<p>私钥是机构的可以避免伪造。就算得到了服务端的公钥，也无法解密出公钥加密过的key对称加密密钥key1</p>
+<h3 id="缺点">缺点：</h3>
+<ul>
+<li>https协议多次握手，导致页面加载时间延长近50%</li>
+<li>https连接缓存不如http高效，会增加数据消耗</li>
+<li>SSL花销</li>
+<li>SSL安全算法对CPU消耗较高，服务器资源消耗较大</li>
+</ul>
+<h2 id="http与https主要区别">HTTP与HTTPS主要区别</h2>
+<ul>
+<li>HTTPS需要得到CA证书。缴费</li>
+<li>http运行在TCP之上，所有的传输内容都是明文。https运行在SSL/TLS上，SSL/TLS运行在TCP上，所有的传输都是加密的</li>
+<li>http和https使用的是不同的连接方式，端口也不一样，http：80，https：443</li>
+<li>http的生成很简单是无状态的：https协议是由http+ssl协议侯成的可进行加密传输的，身份认证的网络协议，可以有效的防止运行商劫持，防劫持，安全。</li>
+</ul>
+<h2 id="web安全">WEB安全</h2>
+<h3 id="xss攻击">XSS攻击</h3>
+<p>跨域脚本攻击。利用html可以执行script。将脚本注入页面中。</p>
+<ul>
+<li>通过修改URL导致脚本被注入----chrome会自动防御</li>
+<li>通过输入框将脚本输入数据库。------我们需要使用xss白名单来解决。</li>
+</ul>
+<h3 id="csrf攻击">CSRF攻击</h3>
+<p>跨站请求伪造，源于Web隐式身份验证机制。</p>
+<ul>
+<li>get请求不用于对数据进行修改</li>
+<li>Cookie禁止设置http Only</li>
+<li>接口设置禁止跨域</li>
+<li>请求附带验证信息，比如验证码或者Token</li>
+</ul>
+<h3 id="点击劫持">点击劫持</h3>
+<p>将要攻击的网站通过iframe嵌入自己的网站中，将ifreme设置为透明。使得用户操作。</p>
+<p>后端解决</p>
+<h3 id="中间人攻击">中间人攻击</h3>
+<p>中间人同时与服务器和客户端建立连接，并且让对方以为连接是安全的。实例上整个通信过程都被控制，用https证书机制可以解决。</p>
+<h2 id="get和post区别">get和post区别：</h2>
+<ul>
+<li>都包含请求头请求行，post中多了body</li>
+<li>get多用来查询，请求参数放在URL中，不会对服务器上的内容产生作用，post用了提交</li>
+<li>get直接添加在URL后面，直接就可以在URL中看到内容，用户可以看到，post放在报文内部看不到直接。</li>
+<li>get提交数据长度有限制，URL长度有限制。post无------URL长度限制是某个浏览器和服务器的限制。</li>
+</ul>
+<p>get：获取信息，无副作用，是幂等的，且可缓存</p>
+<p>post：修改服务器上的信息，有副作用，非幂等，不可缓存</p>
+<p><strong>本质上get与post都是通过http/tcp协议所以无差别。</strong></p>
+<p>从传输的角度来说，都是不安全的，http就是不安全的，可以通过https来确保安全。</p>
+<p><strong>get方法的长度限制</strong>：http没有body和URL长度的限制。对URL限制大多是浏览器和服务器的原因。：服务器处理较长的URL需要消耗较多的资源，为了性能和安全考虑。</p>
+<p><strong>post会产生两个TCP数据包？</strong></p>
+<p>部分会说post会先传head，返回100，再传body。</p>
+<p>http中没有明确说明POST会产生两个数据包，实测不会，所以不是post的必然行为。</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[TCP相关问题]]></title>
+        <id>https://Leonhaiwang.github.io/post/tcp-xiang-guan-wen-ti/</id>
+        <link href="https://Leonhaiwang.github.io/post/tcp-xiang-guan-wen-ti/">
+        </link>
+        <updated>2021-03-25T09:12:19.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="tcp连接特点">TCP连接特点？</h2>
+<ul>
+<li>面向连接的，可靠的字节流</li>
+<li>收到确认，不关心具体传输什么</li>
+</ul>
+<h2 id="tcp的可靠性如何保证">TCP的可靠性如何保证？</h2>
+<ul>
+<li>分块传输</li>
+<li>等待确认</li>
+<li>确认回复</li>
+<li>数据校验</li>
+<li>乱序排序</li>
+<li>重复丢弃</li>
+<li>流量缓冲</li>
+</ul>
+<img src="https://pic3.zhimg.com/80/v2-e8aaab48ff996e5cd8a5b39dc450bd6a_720w.jpg" alt="img" style="zoom:80%;" />
+<h2 id="三次握手四次挥手">三次握手四次挥手</h2>
+<p>为了保证服务端能接收到客户端的信息，并作出正确的应答，进行前两次握手，为了保证客户端能够接受到服务端的信息并能做出正确的应答进行后两次握手。</p>
+<p>SOCKET原理</p>
+<p>套接字（socket）概念：</p>
+<h2 id="三次握手过程">三次握手过程：</h2>
+<p>ACK：表示应答有效。TCP应答号将会包含在TCP数据包中；0 ：无效，1：有效。</p>
+<p>SYN：同步序号，用来建立连接。连接请求的时候：SYN=1，ACK=0。被连接响应的时候：SYN=1，ACK=1。</p>
+<p>FIN：终结，释放一个连接。表明此报文的发送方数据已经发送完毕，要求释放连接。</p>
+<ul>
+<li>第一次握手：建立连接。客户端发送连接请求报文段，将SYN为1，Sequence Number为x；客户端进入SYN_SEND状态，等待服务器的确认。</li>
+<li>第二次握手：服务器收到SYN报文段。服务器收到客户端的SYN报文段，将这个报文段进行确认，设置Acknowledge Numver为x+1,；同时自己发送SYN请求，SYN=1，Sequence NUmber为y；服务器将所有信息放在一个报文段（SYN+ACK）中，一起发送给客户端，此时服务器进入SYN_RECV状态。</li>
+<li>第三次握手：客户端收到服务器的SYN+ACK报文段。将Acknowledge Number置为y+1.向服务器发送ACK报文段。报文段发送完毕，客户端服务端都进入ESRABLISHED状态，完成三次握手。</li>
+</ul>
+<p>然后就可以开始传输数据。</p>
+<p><strong>为什么要三次握手？</strong>：为了防止已失效的连接请求报文段突然又传送到了服务端，产生错误。解决‘网络中存在延迟重复分组’问题。</p>
+<p><strong><mark>防止服务器一直等待浪费资源</mark></strong></p>
+<p>加入client有一个请求 报文段 在网络中延迟了，在serve关闭以后才发送到，serve会以为是否client在请求连接，但是client并没有，server就会一直等待</p>
+<h2 id="四次挥手">四次挥手</h2>
+<p>断开连接</p>
+<ul>
+<li>第一次分手：主机1（可是是客户端，服务端），设置sequence Number 和AcknowledgeNumber，向主机2发送一个FIN报文段；此时，主机1进入FIN_WAIT状态，表示主机1没有数据要发送给主机2了</li>
+<li>第二次分手：主机2收到了主机1的FIN报文段，向主机1回复一个ACK报文，AcknowledgeNumber为SequenceNumbare +1；主机1进去FIN_WAIT_2状态；主机2告诉主机1，同意关闭请求。</li>
+<li>第三次分手：主机2向主机1发送FIN报文段。请求关闭连接，同时主机2进入Last_ACK状态。</li>
+<li>第四次分手：主机1收到主机2发送的FIN报文段。向主机2发送ACK报文段，然后主机1进入TIME_WAIT状态；主机2收到主机1的ACK报文以后就关闭连接。此时，主机1等待2msl没有回复，就证明server正常关闭。主机1关闭连接。</li>
+</ul>
+<p>当有一方要关闭连接的时候，会发送一个指令FIN告诉对方，要关闭连接了，对方会回复一个ACK。此时一个方向上的连接关闭。但是另外一个方向上任然可以传输数据。等到发送完所有的数据以后，会发送一个FIN告诉对方来关闭连接，接收方发送ACK来关闭连接。</p>
+<p>tips：接受到FIN的只能回复一个ACK不能立即回复一个FIN，因为结束时上层应用层给出的。</p>
+<p><strong>为甚吗要四次分手</strong>？</p>
+<p>TCP是一种全双工的，面向连接的，可靠的，基于字节流的运输层通信协议。</p>
+<p>当主机1发送FIN报文段的时候，只是表示主机1没有数据要发送给主机2了，但是在这个阶段，主机1还可以接受主机2的数据。</p>
+<p>当主机2返回ACK报文的时候，表示他已经知道主机1没有数据发送了，但是主机2还是可以发送给主机1.</p>
+<p>当主机2页发送了FIN报文的时候，主机2也没有报文要发送了，之后就会终止连接。</p>
+<p>三次挥手是指发送了三个报文段，四次挥手是指发送了四个报文段。</p>
+<h2 id="三次握手四次挥手-2">三次握手四次挥手</h2>
+<ul>
+<li>
+<p>客户端发送一个SYN=1，并指明客户端自己的序列号，ISN(c)</p>
+</li>
+<li>
+<p>服务端发送自己的SYN作为报答，同样指明自己的ISN(s)，为了确认客户端的ISN，将ISN(c)+1作为ACK值，这样发送一个SYN，序列号就会+1，如果丢失，重传</p>
+</li>
+<li>
+<p>为了确认服务端的SYN，客户端将ISN(s)+1,作为ACK返回给服务端</p>
+</li>
+<li>
+<p>客户端发送一个FIN段，并且包含一个希望接受者看到自己当前的序列号K，同时还有一个ACK表示确认对方最近一次发过来的数据。</p>
+</li>
+<li>
+<p>服务端将K+1作为ACK，表示收到了上一个包，这时上层的应用程序会被告知另外一段发起关闭，通常将会引起自己的关闭。</p>
+</li>
+<li>
+<p>服务端发送自己的FIN段，ACK=k+1，Seq=L</p>
+</li>
+<li>
+<p>客户端确认；ACK = L+1</p>
+</li>
+</ul>
+<figure data-type="image" tabindex="1"><img src="https://i.loli.net/2020/12/19/zypdg3BrPxTMmbJ.png" alt="image-20201219180109462" loading="lazy"></figure>
+<h2 id="tcp数据的传输">TCP数据的传输</h2>
+<h3 id="传输的数据分类">传输的数据分类</h3>
+<ul>
+<li>成块数据传输：量大，报文段常常满。</li>
+<li>交互数据传输：量小，报文段为微小分组，大量的微小分组在广域网传输会出现拥堵。</li>
+</ul>
+<h3 id="交互数据传输技术">交互数据传输技术</h3>
+<h4 id="经受时延的确认">经受时延的确认</h4>
+<ul>
+<li>概念：TCP收到数据并不是发送ack确认，而是稍后发送。</li>
+<li>目的：需要将ACK与沿着该方向发送的数据一起发送，减少开销。</li>
+<li>特点：接收方不必确认每一个收到的分组，ACK是累计的，它表示接受放已经正确收到了一直到确认序号为-1的所有的字节。</li>
+<li>延时时间：200ms</li>
+</ul>
+<h4 id="nagle算法">Nagle算法</h4>
+<ul>
+<li>解决微小分组导致在广域网上出现的拥堵问题。</li>
+<li>核心：减少了通过广域网传输的小分组数目。</li>
+<li>原理：要求一个TCP连接上最多只能有一个未被确认的未完成的分组，该分组的确认到达之前，不能发送其他的分组。TCP收集这些分组，确认到来之前以一个分组的形式发送。</li>
+<li>优点：自适应，确认到达快，数据发送的越快。</li>
+</ul>
+<h2 id="滑动窗口传输">滑动窗口传输</h2>
+<p>发送方和接收方的速率不匹配的时候，保证可靠传输和包乱序的问题。</p>
+<p>接受方根据目前缓冲区的大小，通知发送方目前能接受的最大值。发送方根据接受方的处理能力来发送数据。防疫接收端处理不过来。</p>
+<p>窗口大小：接收方发给发送端的值-----&gt;接受方目前能接受的最大的值。</p>
+<figure data-type="image" tabindex="2"><img src="https://i.loli.net/2020/12/19/6f1VrgNnlYcXdoH.png" alt="image-20201219200139033" loading="lazy"></figure>
+<figure data-type="image" tabindex="3"><img src="https://i.loli.net/2020/12/19/KzkSCoHGBmPcZTd.png" alt="image-20201219200422221" loading="lazy"></figure>
+<h3 id="拥塞窗口">拥塞窗口</h3>
+<p>发送方发送速度过快，导致路由器拥堵（解决）</p>
+<p>发送方增加一个拥塞窗口，每次收到ACK，窗口值+1.。发送时，取拥塞窗口和接收方发来的窗口大小值取最小值</p>
+<p>作用：发送方流量控制</p>
+<h3 id="引发问题">引发问题</h3>
+<h4 id="1零窗口">1.零窗口</h4>
+<p>接收端处理较慢，发送端发送较快，窗口大小慢慢为0</p>
+<p>ZWP技术，发送ZWP给接受方，让接收方ACK窗口大小</p>
+<h4 id="2糊涂窗口">2.糊涂窗口</h4>
+<p>接收方处理太忙，取不完数据，导致发送方越来越小，最后只发送几个字节的数据。</p>
+<p>tips：数据比TCP和IP头小太多，网络利用率低</p>
+<p>避免对窗口大小作相应：</p>
+<ul>
+<li>发送端：Nagle算法，一次只能发送一个分组，分组确认后再发送别的分组。</li>
+<li>接收端：窗口大小小于某值的时候，直接ACK，阻止窗口发送，窗口变大后再发。</li>
+</ul>
+<h2 id="超时重传">超时重传</h2>
+<p>TCP中确认和数据可能丢失，在发送端设立定时器，如果一段时候还未确认，就重传该数据。</p>
+<h3 id="定时器类型">定时器类型</h3>
+<ul>
+<li>重传定时器：等待收到确认。</li>
+<li>坚持定时器：使窗口大小保持不断流动</li>
+<li>保活定时器：检测空闲连接崩溃或者是重启</li>
+<li>2MSL定时器：检测Time_wait时间。（关闭连接）</li>
+</ul>
+<h3 id="机制">机制</h3>
+<p>接受端给发送端确认ACK只会是最后一个连续的包。</p>
+<h3 id="被动等待">被动等待</h3>
+<p>接收端被动的等待发送端超时，然后重发，但是发送端不知道具体应该从哪里重发，可能会造成带宽浪费哦。-------&gt;等待被动超时-时间太久</p>
+<h3 id="主动快传">主动快传</h3>
+<p>不以实际为驱动，以数据为驱动重传。</p>
+<h4 id="原理">原理：</h4>
+<ul>
+<li>如果包未送达，就一直ACK最后那个可能被丢的包</li>
+<li>发送方连续收到3次相同的ACK就重传，不用等待超时。</li>
+</ul>
+<p>利弊：</p>
+<ul>
+<li>解决了被动等待时间浪费的问题----时间问题</li>
+<li>无法解决重传一个还是所有的数据问题----带宽浪费问题</li>
+</ul>
+<h3 id="sack方法">SACK方法</h3>
+<p>基于快传在TCP头中加入SACK-----解决了应该发送什么包问题，带宽</p>
+<p>SACK记录数值范围，表示什么值被收到了。</p>
+<p>SACK只是一种辅助，发送方不能完全依赖。主要依赖ACK和定时器timeOut</p>
+<h2 id="确定超时时间">确定超时时间</h2>
+<p>路由器和网络流量均会变化，定时器不能设置为一个固定的值。</p>
+<p>超时：重发慢，效率低，性能差。</p>
+<p>缺时：未丢就重发，网络拥堵-----&gt;更多的重发和超时。</p>
+<h3 id="动态变化">动态变化</h3>
+<ul>
+<li>每次重传时间为上次的一倍，直到最大间隔为64s，‘指数退避’</li>
+<li>首次到最后放弃重传时间一般为9min</li>
+<li>依赖以往的往返时间动态计算</li>
+</ul>
+<p>往返时间并不是一个准确的值，会通过多次取值，估算。</p>
+<ul>
+<li>被平滑的RTT估计器</li>
+<li>被平滑的均值偏差估计器</li>
+</ul>
+<h3 id="重传时间的具体计算">重传时间的具体计算</h3>
+<ul>
+<li>计算往返时间RTT，保存结果</li>
+<li>通过测量结果维护一个被平滑的RTT估计器和被平滑的均值偏差估计器</li>
+<li>根据这两个估计器计算</li>
+</ul>
+<h2 id="超时重传引起问题">超时重传引起问题</h2>
+<p>当网络延迟的时候，会引起重传，过多的重传会导致网络负担加重，从而引起更大的延时和丢包。恶心循环</p>
+<p>解决：</p>
+<ul>
+<li>慢启动，降低分组进入网络的传输速率</li>
+<li>拥塞避免：处理丢失分组的算法</li>
+<li>快速重传</li>
+<li>快速恢复</li>
+</ul>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[你了解浏览器缓存嘛？]]></title>
+        <id>https://Leonhaiwang.github.io/post/ni-liao-jie-liu-lan-qi-huan-cun-ma/</id>
+        <link href="https://Leonhaiwang.github.io/post/ni-liao-jie-liu-lan-qi-huan-cun-ma/">
+        </link>
+        <updated>2021-03-25T09:10:47.000Z</updated>
+        <content type="html"><![CDATA[<p>浏览器缓存着用户通过http获取的所有的资源，在下一次请求的时候可以避免重复向服务器发出多余的请求。</p>
+<h2 id="强缓存">强缓存</h2>
+<p>浏览器在加载资源的时候，会先判断是否命中强缓存，是否命中协商缓存。</p>
+<p>如果命中强缓存，就会直接使用缓存中的信息，不会向服务器发送请求。</p>
+<ul>
+<li>先查看header中的Expire和Cache-control是否潘祖规则</li>
+<li>满足---&gt;返回</li>
+<li>不满足----&gt;发送请求数据</li>
+<li>服务器返回数据</li>
+<li>新数据存入缓存</li>
+</ul>
+<p>Expire：包含一个时间，过了这个事件响应将会失效。是一个绝对时间，如果用户修改了本机事时间，就会失效。</p>
+<p>Cache-control（优先级高）：相对事件：MAX_age.:该资源最大有效时间。基本上都会设置no-cache：需要进行协商缓存。nostore禁止缓存。public默认。provate所有的内容只有客户端可以缓存。max-age：缓存失效时间</p>
+<p>效果分为：</p>
+<ul>
+<li>from memory cache：不请求网络资源，一般脚本，字体，图片会在，资源在内存中</li>
+<li>from disk cache：不请求网络资源，在磁盘中，非脚本，css</li>
+<li>资源大小数值：从服务器下载最新资源。</li>
+<li>300报文大小：请求服务端没有更新，使用本地资源</li>
+</ul>
+<h2 id="协商缓存">协商缓存</h2>
+<p>当强缓存没有命中的时候，浏览器会发送一个请求到服务器，服务器根据请求头中的部分信息，来判断是否命中缓存，如果命中返回304，告诉浏览器资源委更新，可使用本地的缓存。</p>
+<ul>
+<li>把资源标识，发送到服务器，确认是否有更新</li>
+<li>如果未更新，304，浏览器使用本地缓存。</li>
+<li>已更新，返回新的数据。</li>
+<li>将数据存入缓存</li>
+</ul>
+<h3 id="last-modified">Last-Modified</h3>
+<p>浏览器第一次请求资源的时候，服务器返回一个header有一个Last-Modified字段，表示资源的最后修改时间。-----绝对时间</p>
+<p>当浏览器再次请求资源的时候，请求头中带有一个IF-Modifted-Since：第一次请求Last-Modified值。对比，如果相等，未修改，304使用本地缓存，</p>
+<p>Etag（优先级高）:一般由文件hash产生，保证资源的唯一性，资源发生改变就盗用tag变化。</p>
+<p>浏览器第一次请求的时候，返回一个etag，再次请求的时候通过If-no-match：发送回服务器，进行比较。如果相等未修改304</p>
+<h2 id="用户行为对浏览器缓存的影响">用户行为对浏览器缓存的影响</h2>
+<ol>
+<li>打开网页，如果有disk cache，可以使用，无法发送网络请求。</li>
+<li>f5普通刷新，memory cache可用，会被优先使用，其次才是cache disk</li>
+<li>Ctrl+f5，浏览器不使用缓存、</li>
+</ol>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[从输入URL到页面加载发生了什么]]></title>
         <id>https://Leonhaiwang.github.io/post/cong-shu-ru-url-dao-ye-mian-jia-zai-fa-sheng-liao-shi-me/</id>
