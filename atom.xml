@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Leonhaiwang.github.io</id>
     <title>Leon</title>
-    <updated>2021-03-25T08:47:44.535Z</updated>
+    <updated>2021-03-25T08:48:22.638Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Leonhaiwang.github.io"/>
     <link rel="self" href="https://Leonhaiwang.github.io/atom.xml"/>
@@ -4169,15 +4169,6 @@ dep.notify()
 </code></pre>
 <figure data-type="image" tabindex="7"><img src="https://i.loli.net/2020/11/13/UgHZd5Eok4qK3rY.png" alt="image-20201113131617496" loading="lazy"></figure>
 <figure data-type="image" tabindex="8"><img src="https://i.loli.net/2020/11/13/tcOjsb5MhNvHxoG.png" alt="image-20201113135203740" loading="lazy"></figure>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[fdgh ]]></title>
-        <id>https://Leonhaiwang.github.io/post/fdgh/</id>
-        <link href="https://Leonhaiwang.github.io/post/fdgh/">
-        </link>
-        <updated>2021-03-25T07:16:59.000Z</updated>
-        <content type="html"><![CDATA[<p>fdghfdghfdghfdghfdghfdh</p>
 ]]></content>
     </entry>
 </feed>
