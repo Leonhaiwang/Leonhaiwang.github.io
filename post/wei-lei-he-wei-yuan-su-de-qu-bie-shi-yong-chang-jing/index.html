@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>防抖and节流 | Leon</title>
+<title>伪类和伪元素的区别？使用场景？ | Leon</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,13 +18,11 @@
 
 
 
-    <meta name="description" content="防抖节流
-性能优化
-防抖
-在第一次执行函数的时候，给定一个值，如果在这个时间内没有再次触发，就执行，否则当前计时取消，重新开始计时
-任务频繁触发的情况下，只有任务触发间隔超过了指定的间隔的时候，任务才会执行。
-//防抖---某个时间段内只处..." />
-    <meta name="keywords" content="性能优化,JavaScript" />
+    <meta name="description" content="伪类：用来选择不能够被普通选择器选择的文档以外的元素  ：hover    可以理解为特定状态元素的选择器
+伪元素：需要创建不存在与文档中的元素，比如：before     类似添加一个新的节点到DOM中
+区别：
+表示方法：css2中伪类a..." />
+    <meta name="keywords" content="" />
   </head>
   <body>
     <div id="app" class="main">
@@ -95,73 +93,33 @@
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">防抖and节流</h2>
+            <h2 class="post-title">伪类和伪元素的区别？使用场景？</h2>
             <div class="post-date">2021-03-25</div>
             
             <div class="post-content" v-pre>
-              <h1 id="防抖节流">防抖节流</h1>
-<p>性能优化</p>
-<h2 id="防抖">防抖</h2>
-<p>在第一次执行函数的时候，给定一个值，如果在这个时间内没有再次触发，就执行，否则当前计时取消，重新开始计时</p>
-<p>任务频繁触发的情况下，只有任务触发间隔超过了指定的间隔的时候，任务才会执行。</p>
-<pre><code class="language-js">//防抖---某个时间段内只处理一次
-    function debounce(fn,delay){
-      let timer = null;
-      return function(){
-        //每次点击的时候将前一个定时器清除
-        clearTimeout(timer);
-        timer = setTimeout(()=&gt;{
-          fn.call(this,arguments)
-        },delay)
-      }
-    }
-</code></pre>
-<h2 id="节流">节流</h2>
-<p>指定的时间内只会执行一次</p>
+              <p>伪类：用来选择不能够被普通选择器选择的文档以外的元素  ：hover    <strong>可以理解为<mark>特定状态</mark>元素的选择器</strong></p>
+<p>伪元素：需要创建不存在与文档中的元素，比如：before     <strong>类似添加一个新的节点到</strong>DOM<strong>中</strong></p>
+<h2 id="区别">区别：</h2>
+<p>表示方法：css2中伪类and伪元素都是以：  css2.1以后伪类用<code>:</code> 伪元素用 <code>::</code>表示。</p>
+<p>定义不同：伪类（假的类）------&gt;添加类达到效果，伪元素（假的元素 ）-----&gt;添加元素达到效果。</p>
+<h2 id="异同">异同：</h2>
 <ul>
-<li>懒加载监听滚动条的位置，使用节流函数按照一定的时间频率获取</li>
-<li>用户点击提交，使用节流，只允许一定时间内执行一次</li>
-<li>TIPS：为什么需要节流？
-<ul>
-<li>一些操作可能会造成浏览器回流，造成过多的损耗，使用节流来防止这种情况</li>
+<li>都用来表示文档树以外的“元素”</li>
+<li>伪类和伪元素分别用 ：  | ：：</li>
+<li><mark>伪类是操作文旦中已经有的元素，伪元素是创建一个文档以外的元素</mark></li>
+<li><strong>如果没有伪元素，是否需要添加元素才能达到效果，如果是---&gt;伪元素    反之---&gt;伪类</strong></li>
 </ul>
-</li>
-</ul>
-<pre><code class="language-js">function throttle(fn,delay){
-      let canRun = true;//闭包
-      return function(){
-        if(!canRun)return 
-        //防止执行之前 再被执行
-        canRun = false
-        setTimeout(()=&gt;{
-          fn.call(this,arguments);
-          canRun = true
-        },delay)
-      }
-    }
-</code></pre>
-<p>节流还可以利用时间戳，差值是否大于指定间隔</p>
+<p>伪类：  hover active link ：nth-child<br>
+伪元素： ：before ::first-letter        ::selection  ::backdrop</p>
 
             </div>
-            
-              <div class="tag-container">
-                
-                  <a href="https://Leonhaiwang.github.io/tag/UItHKgJej/" class="tag">
-                    性能优化
-                  </a>
-                
-                  <a href="https://Leonhaiwang.github.io/tag/wBLqdA-6s/" class="tag">
-                    JavaScript
-                  </a>
-                
-              </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://Leonhaiwang.github.io/post/http-chu-tan/">
+                <a href="https://Leonhaiwang.github.io/post/callapplybind-li-jie-ji-shi-xian/">
                   <h3 class="post-title">
-                    HTTP 初探
+                    call、apply、bind 理解及实现
                   </h3>
                 </a>
               </div>
