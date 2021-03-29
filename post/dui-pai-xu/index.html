@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>防抖and节流 | Leon</title>
+<title>堆排序 | Leon</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,13 +18,16 @@
 
 
 
-    <meta name="description" content="防抖节流
-性能优化
-防抖
-在第一次执行函数的时候，给定一个值，如果在这个时间内没有再次触发，就执行，否则当前计时取消，重新开始计时
-任务频繁触发的情况下，只有任务触发间隔超过了指定的间隔的时候，任务才会执行。
-//防抖---某个时间段内只处..." />
-    <meta name="keywords" content="性能优化,JavaScript" />
+    <meta name="description" content="堆排序是一种类似于完全二叉树（子节点总是大于或者小于父节点）的一种数据结构，
+平均时间复杂的O(nlogn)
+
+大顶堆：每个节点的值都大于或者等于子节点的值，升序
+小顶堆：每个节点的值都小于或者等于子节点的值，降序
+
+排序过程：
+
+将所有的..." />
+    <meta name="keywords" content="" />
   </head>
   <body>
     <div id="app" class="main">
@@ -95,73 +98,74 @@
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">防抖and节流</h2>
-            <div class="post-date">2021-03-25</div>
+            <h2 class="post-title">堆排序</h2>
+            <div class="post-date">2021-03-29</div>
             
             <div class="post-content" v-pre>
-              <h1 id="防抖节流">防抖节流</h1>
-<p>性能优化</p>
-<h2 id="防抖">防抖</h2>
-<p>在第一次执行函数的时候，给定一个值，如果在这个时间内没有再次触发，就执行，否则当前计时取消，重新开始计时</p>
-<p>任务频繁触发的情况下，只有任务触发间隔超过了指定的间隔的时候，任务才会执行。</p>
-<pre><code class="language-js">//防抖---某个时间段内只处理一次
-    function debounce(fn,delay){
-      let timer = null;
-      return function(){
-        //每次点击的时候将前一个定时器清除
-        clearTimeout(timer);
-        timer = setTimeout(()=&gt;{
-          fn.call(this,arguments)
-        },delay)
-      }
-    }
-</code></pre>
-<h2 id="节流">节流</h2>
-<p>指定的时间内只会执行一次</p>
+              <p>堆排序是一种类似于完全二叉树（子节点总是大于或者小于父节点）的一种数据结构，</p>
+<p>平均时间复杂的O(nlogn)</p>
 <ul>
-<li>懒加载监听滚动条的位置，使用节流函数按照一定的时间频率获取</li>
-<li>用户点击提交，使用节流，只允许一定时间内执行一次</li>
-<li>TIPS：为什么需要节流？
+<li>大顶堆：每个节点的值都大于或者等于子节点的值，升序</li>
+<li>小顶堆：每个节点的值都小于或者等于子节点的值，降序</li>
+</ul>
+<p>排序过程：</p>
 <ul>
-<li>一些操作可能会造成浏览器回流，造成过多的损耗，使用节流来防止这种情况</li>
+<li>将所有的数据存储在堆中</li>
+<li>按大顶堆构建堆，将数据从大到小取出，构造出大顶堆</li>
+<li>入堆完成后，将堆顶元素取出，末尾元素置于堆顶，调整结构</li>
+<li>反复执行</li>
 </ul>
-</li>
-</ul>
-<pre><code class="language-js">function throttle(fn,delay){
-      let canRun = true;//闭包
-      return function(){
-        if(!canRun)return 
-        //防止执行之前 再被执行
-        canRun = false
-        setTimeout(()=&gt;{
-          fn.call(this,arguments);
-          canRun = true
-        },delay)
-      }
+<pre><code class="language-js">  var len;
+
+  function buildMaxHeap(arr) { //大顶堆
+    len = arr.length;
+    for (var i = Math.floor(len / 2); i &gt;= 0; i--) {
+      heapify(arr, i)
     }
+  }
+  //堆调整
+  function heapify(arr, i) {
+    var left = 2 * i,
+      right = 2 * i + 2,
+      largest = i;
+    if (left &lt; len &amp;&amp; arr[left] &gt; arr[largest]) {
+      largest = left;
+    }
+    if (right &lt; len &amp;&amp; arr[right] &gt; arr[largest]) {
+      largest = right;
+    }
+    if (largest != i) {
+      swap(arr, i, largest)
+      heapify(arr, largest)
+    }
+  }
+
+  function swap(arr, i, j) {
+    var temp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = temp;
+  }
+
+  function heapSort(arr) {
+    buildMaxHeap(arr);
+    for (let i = arr.length - 1; i &gt; 0; i--) {
+      swap(arr, 0, i);
+      len--;
+      heapify(arr, 0)
+    }
+    return arr;
+  }
+  console.log(heapSort([1, 3, 7, 3, 24, 5]));
 </code></pre>
-<p>节流还可以利用时间戳，差值是否大于指定间隔</p>
 
             </div>
-            
-              <div class="tag-container">
-                
-                  <a href="https://Leonhaiwang.github.io/tag/UItHKgJej/" class="tag">
-                    性能优化
-                  </a>
-                
-                  <a href="https://Leonhaiwang.github.io/tag/wBLqdA-6s/" class="tag">
-                    JavaScript
-                  </a>
-                
-              </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://Leonhaiwang.github.io/post/http-chu-tan/">
+                <a href="https://Leonhaiwang.github.io/post/er-wei-ma-deng-lu-de-ben-zhi/">
                   <h3 class="post-title">
-                    HTTP 初探
+                    二维码登录的本质
                   </h3>
                 </a>
               </div>
