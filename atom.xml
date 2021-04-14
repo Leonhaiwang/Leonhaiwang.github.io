@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Leonhaiwang.github.io</id>
     <title>Leon</title>
-    <updated>2021-04-06T00:58:55.629Z</updated>
+    <updated>2021-04-14T09:01:15.034Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Leonhaiwang.github.io"/>
     <link rel="self" href="https://Leonhaiwang.github.io/atom.xml"/>
@@ -10,6 +10,89 @@
     <logo>https://Leonhaiwang.github.io/images/avatar.png</logo>
     <icon>https://Leonhaiwang.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, Leon</rights>
+    <entry>
+        <title type="html"><![CDATA[数组扁平化 VS 对象扁平化]]></title>
+        <id>https://Leonhaiwang.github.io/post/shu-zu-bian-ping-hua-vs-dui-xiang-bian-ping-hua/</id>
+        <link href="https://Leonhaiwang.github.io/post/shu-zu-bian-ping-hua-vs-dui-xiang-bian-ping-hua/">
+        </link>
+        <updated>2021-04-14T08:59:36.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="数组扁平化">数组扁平化</h2>
+<p>flat方法</p>
+<ul>
+<li>reduce</li>
+<li><strong>...</strong></li>
+<li>tostring</li>
+<li></li>
+</ul>
+<pre><code class="language-js">//reduce
+function flattens(arr){
+      return arr.reduce((prev,cur)=&gt;{
+        return prev.concat(Array.isArray(cur)?flattens(cur):cur)
+      },[])
+    }
+//遍历递归andforEach
+function flattens(arr){
+      var result = []
+      for(let i = 0;i&lt;arr.length;i++){
+        if(Array.isArray(arr[i])){
+          result = result.concat(flattens(arr[i]))
+        }
+        else{
+          result.push(arr[i])
+        }
+      }
+      return result
+    }
+//arr.forEach(x=&gt;{
+        if(Array.isArray(x)){
+          result = result.concat(flattens(x))
+        }
+        else{
+          result.push(x)
+        }
+      })
+  //map
+      function flattens(arr){
+      return arr.toString().split(',').map(item=&gt;+item)
+    }
+//apply some
+function flattens(arr){
+      while(arr.some(item=&gt;Array.isArray(item))){
+        arr = [].concat.apply([],arr)
+      }
+      return arr
+    }
+ 
+//...
+ function flattens(arr){
+      while(arr.some(item=&gt;Array.isArray(item))){
+        arr = [].concat(...arr)
+      }
+      return arr
+    }
+</code></pre>
+<h1 id="对象扁平化">对象扁平化</h1>
+<pre><code class="language-js"> function objectFlat(obj = {}) {
+        const res = {};
+        function flat(item, perKey = &quot;&quot;) {
+          //entries返回一个可枚举属性的数组
+          Object.entries(item).forEach(([key, val]) =&gt; {
+            const newKey = perKey ? `${perKey}.${key}` : key;
+            if (val &amp;&amp; typeof val === &quot;object&quot;) {
+              flat(val, newKey);
+            } else {
+              res[newKey] = val;
+            }
+          });
+        }
+        flat(obj);
+        return res;
+      }
+      const source = { a: { b: { c: 1, d: 2 }, e: 3 }, f: { g: 2 } };
+      console.log(objectFlat(source));
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[webpack初探]]></title>
         <id>https://Leonhaiwang.github.io/post/webpack-chu-tan/</id>
@@ -1222,53 +1305,6 @@ jsy.apply(null,[1,2,3]);
 <li>快速重传</li>
 <li>快速恢复</li>
 </ul>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[你了解浏览器缓存嘛？]]></title>
-        <id>https://Leonhaiwang.github.io/post/ni-liao-jie-liu-lan-qi-huan-cun-ma/</id>
-        <link href="https://Leonhaiwang.github.io/post/ni-liao-jie-liu-lan-qi-huan-cun-ma/">
-        </link>
-        <updated>2021-03-25T09:10:47.000Z</updated>
-        <content type="html"><![CDATA[<p>浏览器缓存着用户通过http获取的所有的资源，在下一次请求的时候可以避免重复向服务器发出多余的请求。</p>
-<h2 id="强缓存">强缓存</h2>
-<p>浏览器在加载资源的时候，会先判断是否命中强缓存，是否命中协商缓存。</p>
-<p>如果命中强缓存，就会直接使用缓存中的信息，不会向服务器发送请求。</p>
-<ul>
-<li>先查看header中的Expire和Cache-control是否潘祖规则</li>
-<li>满足---&gt;返回</li>
-<li>不满足----&gt;发送请求数据</li>
-<li>服务器返回数据</li>
-<li>新数据存入缓存</li>
-</ul>
-<p>Expire：包含一个时间，过了这个事件响应将会失效。是一个绝对时间，如果用户修改了本机事时间，就会失效。</p>
-<p>Cache-control（优先级高）：相对事件：MAX_age.:该资源最大有效时间。基本上都会设置no-cache：需要进行协商缓存。nostore禁止缓存。public默认。provate所有的内容只有客户端可以缓存。max-age：缓存失效时间</p>
-<p>效果分为：</p>
-<ul>
-<li>from memory cache：不请求网络资源，一般脚本，字体，图片会在，资源在内存中</li>
-<li>from disk cache：不请求网络资源，在磁盘中，非脚本，css</li>
-<li>资源大小数值：从服务器下载最新资源。</li>
-<li>300报文大小：请求服务端没有更新，使用本地资源</li>
-</ul>
-<h2 id="协商缓存">协商缓存</h2>
-<p>当强缓存没有命中的时候，浏览器会发送一个请求到服务器，服务器根据请求头中的部分信息，来判断是否命中缓存，如果命中返回304，告诉浏览器资源委更新，可使用本地的缓存。</p>
-<ul>
-<li>把资源标识，发送到服务器，确认是否有更新</li>
-<li>如果未更新，304，浏览器使用本地缓存。</li>
-<li>已更新，返回新的数据。</li>
-<li>将数据存入缓存</li>
-</ul>
-<h3 id="last-modified">Last-Modified</h3>
-<p>浏览器第一次请求资源的时候，服务器返回一个header有一个Last-Modified字段，表示资源的最后修改时间。-----绝对时间</p>
-<p>当浏览器再次请求资源的时候，请求头中带有一个IF-Modifted-Since：第一次请求Last-Modified值。对比，如果相等，未修改，304使用本地缓存，</p>
-<p>Etag（优先级高）:一般由文件hash产生，保证资源的唯一性，资源发生改变就盗用tag变化。</p>
-<p>浏览器第一次请求的时候，返回一个etag，再次请求的时候通过If-no-match：发送回服务器，进行比较。如果相等未修改304</p>
-<h2 id="用户行为对浏览器缓存的影响">用户行为对浏览器缓存的影响</h2>
-<ol>
-<li>打开网页，如果有disk cache，可以使用，无法发送网络请求。</li>
-<li>f5普通刷新，memory cache可用，会被优先使用，其次才是cache disk</li>
-<li>Ctrl+f5，浏览器不使用缓存、</li>
-</ol>
 ]]></content>
     </entry>
 </feed>

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>堆排序 | Leon</title>
+<title>数组扁平化 VS 对象扁平化 | Leon</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,15 +18,18 @@
 
 
 
-    <meta name="description" content="堆排序是一种类似于完全二叉树（子节点总是大于或者小于父节点）的一种数据结构，
-平均时间复杂的O(nlogn)
+    <meta name="description" content="数组扁平化
+flat方法
 
-大顶堆：每个节点的值都大于或者等于子节点的值，升序
-小顶堆：每个节点的值都小于或者等于子节点的值，降序
+reduce
+...
+tostring
 
-排序过程：
 
-将所有的..." />
+//reduce
+function flattens(arr){
+      return arr.reduce((prev,cur)=&gt;{
+        re..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -98,64 +101,84 @@
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">堆排序</h2>
-            <div class="post-date">2021-03-29</div>
+            <h2 class="post-title">数组扁平化 VS 对象扁平化</h2>
+            <div class="post-date">2021-04-14</div>
             
             <div class="post-content" v-pre>
-              <p>堆排序是一种类似于完全二叉树（子节点总是大于或者小于父节点）的一种数据结构，</p>
-<p>平均时间复杂的O(nlogn)</p>
+              <h2 id="数组扁平化">数组扁平化</h2>
+<p>flat方法</p>
 <ul>
-<li>大顶堆：每个节点的值都大于或者等于子节点的值，升序</li>
-<li>小顶堆：每个节点的值都小于或者等于子节点的值，降序</li>
+<li>reduce</li>
+<li><strong>...</strong></li>
+<li>tostring</li>
+<li></li>
 </ul>
-<p>排序过程：</p>
-<ul>
-<li>将所有的数据存储在堆中</li>
-<li>按大顶堆构建堆，将数据从大到小取出，构造出大顶堆</li>
-<li>入堆完成后，将堆顶元素取出，末尾元素置于堆顶，调整结构</li>
-<li>反复执行</li>
-</ul>
-<pre><code class="language-js">  var len;
-
-  function buildMaxHeap(arr) { //大顶堆
-    len = arr.length;
-    for (var i = Math.floor(len / 2); i &gt;= 0; i--) {
-      heapify(arr, i)
+<pre><code class="language-js">//reduce
+function flattens(arr){
+      return arr.reduce((prev,cur)=&gt;{
+        return prev.concat(Array.isArray(cur)?flattens(cur):cur)
+      },[])
     }
-  }
-  //堆调整
-  function heapify(arr, i) {
-    var left = 2 * i,
-      right = 2 * i + 2,
-      largest = i;
-    if (left &lt; len &amp;&amp; arr[left] &gt; arr[largest]) {
-      largest = left;
+//遍历递归andforEach
+function flattens(arr){
+      var result = []
+      for(let i = 0;i&lt;arr.length;i++){
+        if(Array.isArray(arr[i])){
+          result = result.concat(flattens(arr[i]))
+        }
+        else{
+          result.push(arr[i])
+        }
+      }
+      return result
     }
-    if (right &lt; len &amp;&amp; arr[right] &gt; arr[largest]) {
-      largest = right;
+//arr.forEach(x=&gt;{
+        if(Array.isArray(x)){
+          result = result.concat(flattens(x))
+        }
+        else{
+          result.push(x)
+        }
+      })
+  //map
+      function flattens(arr){
+      return arr.toString().split(',').map(item=&gt;+item)
     }
-    if (largest != i) {
-      swap(arr, i, largest)
-      heapify(arr, largest)
+//apply some
+function flattens(arr){
+      while(arr.some(item=&gt;Array.isArray(item))){
+        arr = [].concat.apply([],arr)
+      }
+      return arr
     }
-  }
-
-  function swap(arr, i, j) {
-    var temp = arr[i];
-    arr[i] = arr[j];
-    arr[j] = temp;
-  }
-
-  function heapSort(arr) {
-    buildMaxHeap(arr);
-    for (let i = arr.length - 1; i &gt; 0; i--) {
-      swap(arr, 0, i);
-      len--;
-      heapify(arr, 0)
+ 
+//...
+ function flattens(arr){
+      while(arr.some(item=&gt;Array.isArray(item))){
+        arr = [].concat(...arr)
+      }
+      return arr
     }
-    return arr;
-  }
-  console.log(heapSort([1, 3, 7, 3, 24, 5]));
+</code></pre>
+<h1 id="对象扁平化">对象扁平化</h1>
+<pre><code class="language-js"> function objectFlat(obj = {}) {
+        const res = {};
+        function flat(item, perKey = &quot;&quot;) {
+          //entries返回一个可枚举属性的数组
+          Object.entries(item).forEach(([key, val]) =&gt; {
+            const newKey = perKey ? `${perKey}.${key}` : key;
+            if (val &amp;&amp; typeof val === &quot;object&quot;) {
+              flat(val, newKey);
+            } else {
+              res[newKey] = val;
+            }
+          });
+        }
+        flat(obj);
+        return res;
+      }
+      const source = { a: { b: { c: 1, d: 2 }, e: 3 }, f: { g: 2 } };
+      console.log(objectFlat(source));
 </code></pre>
 
             </div>
@@ -163,9 +186,9 @@
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://Leonhaiwang.github.io/post/er-wei-ma-deng-lu-de-ben-zhi/">
+                <a href="https://Leonhaiwang.github.io/post/webpack-chu-tan/">
                   <h3 class="post-title">
-                    二维码登录的本质
+                    webpack初探
                   </h3>
                 </a>
               </div>
