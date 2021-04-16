@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://Leonhaiwang.github.io</id>
     <title>Leon</title>
-    <updated>2021-04-15T07:07:51.567Z</updated>
+    <updated>2021-04-16T13:53:55.433Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://Leonhaiwang.github.io"/>
     <link rel="self" href="https://Leonhaiwang.github.io/atom.xml"/>
@@ -10,6 +10,237 @@
     <logo>https://Leonhaiwang.github.io/images/avatar.png</logo>
     <icon>https://Leonhaiwang.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, Leon</rights>
+    <entry>
+        <title type="html"><![CDATA[# 图片懒加载-按需加载]]></title>
+        <id>https://Leonhaiwang.github.io/post/tu-pian-lan-jia-zai-an-xu-jia-zai/</id>
+        <link href="https://Leonhaiwang.github.io/post/tu-pian-lan-jia-zai-an-xu-jia-zai/">
+        </link>
+        <updated>2021-04-16T13:53:23.000Z</updated>
+        <content type="html"><![CDATA[<p>#为什么要进行图片懒加载</p>
+<ul>
+<li>可以让不可视的图片不去加载，避免一次性加载过多的图片导致请求阻塞，提高网站的加载速度，提高用户体验。</li>
+</ul>
+<p><strong>原理</strong>：监听图片资源容器是否出现在视口区域内，决定图片是否要加载。<mark>如何判断元素处于加载区域</mark></p>
+<h2 id="实现">实现</h2>
+<ol>
+<li>给目标元素一张占位图，将真实的图片链接存在自定义的属性中，data-src</li>
+<li>监听scroll事件</li>
+<li>利用scroll中的Element.getBoundingClientRect()方法判断目标元素与视口的交叉状态、</li>
+<li>当交叉的时候，将真实的图片链接赋值给src或者bgcimage</li>
+</ol>
+<ul>
+<li>scroll可能会被高频触发，这里可以加上节流函数</li>
+<li>getBoundingClientRect()方法：返回元素的大小以及相对于视口的位置信息
+<ul>
+<li>left top</li>
+<li>width height</li>
+<li><mark>结合视口的宽度和高度，就可以判断元素是否出现在视口区域内</mark></li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-js"> function isElementInViewport(el) {
+        const { left, top, width, height } = el.getBoundingClientRect();
+        const w = window.innerWidth || document.documentElement.clientWidth;
+        const h = window.innerHeight || document.documentElement.clientHeight;
+        return top &lt;= h &amp;&amp; top + height &gt;= 0 &amp;&amp; left &lt;= w &amp;&amp; left + width &gt;= 0;
+      }
+</code></pre>
+<p>实现</p>
+<ul>
+<li>scroll只有在滚动的时候才会加载，要首屏渲染</li>
+<li>addEventListener()注册事件处理程序的时候，需要保存事件处理程序的引用，以便销毁注册的事件程序。</li>
+</ul>
+<pre><code class="language-js">//简单的html端
+      document.addEventListener(&quot;DOMContentLoaded&quot;, () =&gt; {
+        //获取所有的class为lazy的img标签
+        let lazyImages = [].slice.call(document.querySelectorAll(&quot;img.lazy&quot;));
+        //active节流
+        let active = false;
+        const lazyLoad = () =&gt; {
+          //throttle：200ms执行一次
+          if (active) return;
+          active = true;
+          setTimeout(() =&gt; {
+            lazyImages.forEach((lazyImage) =&gt; {
+              //判断元素是否进去viewport
+              if (isInViewport(lazyImage)) {
+                //设置真实的图片
+                //ele.dataset   ==== 读取自定义属性集合
+                lazyImage.src = lazyImage.dataset.src;
+                lazyImage.srcset = lazyImage.dataset.srcset;
+                //删除class 防止下次重复查找到img标签
+                lazyImage.classList.remove(&quot;lazy&quot;);
+              }
+              //更新lazyimags数组，把还没处理的元素拿出来
+              lazyImages = lazyImages.filter((image) =&gt; {
+                return image != lazyImage;
+              });
+              //全部处理完毕，移除监听
+              if (lazyImages.length === 0) {
+                document.removeEventListener(&quot;scroll&quot;, lazyLoad);
+                document.removeEventListener(&quot;resize&quot;, lazyLoad);
+                document.removeEventListener(&quot;orientationchange&quot;, lazyLoad);
+              }
+            });
+            active = false;
+          }, 200);
+        };
+        document.addEventListener(&quot;scroll&quot;, lazyLoad);
+        document.addEventListener(&quot;resize&quot;, lazyLoad);
+        document.addEventListener(&quot;orientationchange&quot;, lazyLoad);
+      });
+</code></pre>
+<p>适合单页面应用的写法</p>
+<pre><code class="language-js">function LazyLoad() {
+  // 这个active是节流throttle所用的标志位，这里用到了闭包知识
+  let active = false;
+
+  const lazyLoad = () =&gt; {
+    // throttle相关：200ms内只会执行一次lazyLoad方法
+    if (active) return;
+    active = true;
+
+    setTimeout(() =&gt; {
+      // 获取所有class为lazy的img标签，这里由于之前已经把处理过的img标签的class删掉了  所以不会重复查找
+      let lazyImages = [].slice.call(document.querySelectorAll(&quot;img.lazy&quot;));
+
+      lazyImages.forEach(lazyImage =&gt; {
+        // 判断元素是否进入viewport
+        if (isInViewport(lazyImage)) {
+          // &lt;img class=&quot;lazy&quot; src=&quot;[占位图]&quot; data-src=&quot;[真实url地址]&quot; data-srcset=&quot;[不同屏幕密度下，不同的url地址]&quot; alt=&quot;I'm an image!&quot;&gt;
+          // ele.dataset.* 可以读取自定义属性集合，比如data-*
+          // img.srcset 属性用于设置不同屏幕密度下，image自动加载不同的图片  比如&lt;img src=&quot;image-128.png&quot; srcset=&quot;image-256.png 2x&quot; /&gt;
+          lazyImage.src = lazyImage.dataset.src;
+          lazyImage.srcset = lazyImage.dataset.srcset;
+          // 删除class  防止下次重复查找到改img标签
+          lazyImage.classList.remove(&quot;lazy&quot;);
+        }
+
+        // 当全部处理完了，移除监听
+        if (lazyImages.length === 0) {
+          document.removeEventListener(&quot;scroll&quot;, lazyLoad);
+          window.removeEventListener(&quot;resize&quot;, lazyLoad);
+          window.removeEventListener(&quot;orientationchange&quot;, lazyLoad);
+        }
+      })
+
+      active = false;
+    }, 200);
+  }
+
+  document.addEventListener(&quot;scroll&quot;, lazyLoad);
+  document.addEventListener(&quot;resize&quot;, lazyLoad);
+  document.addEventListener(&quot;orientationchange&quot;, lazyLoad);
+}
+
+</code></pre>
+<p>将函数放在mounted中</p>
+<pre><code class="language-vue">mounted: function () {
+    LazyLoad();
+  }
+
+</code></pre>
+<p>封装img-lazy组件</p>
+<pre><code class="language-js">&lt;template&gt;
+  &lt;img :class=&quot;['lazy', className]&quot; :src=&quot;defaultImg&quot; :data-src=&quot;url&quot; :data-srcset=&quot;`${url} 1x`&quot; alt=&quot;fordeal&quot;&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+  export default {
+    props: {
+      url: {
+        type: String
+      },
+      defaultImg: {
+        type: String,
+        default: [默认图片]
+      className: {
+        type: String,
+        default: ''
+      }
+    }
+  }
+&lt;/script&gt;
+
+</code></pre>
+<p>使用</p>
+<pre><code class="language-vue">&lt;img-lazy className=&quot;image&quot; :url=&quot;item.display_image&quot; /&gt;
+</code></pre>
+<h2 id="现在api">现在api</h2>
+<p>IntersectionObserver接口：<strong>异步</strong>监听目标元素与其祖先或者视窗的交叉状态，不会随着目标元素的滚动同步触发。（不会影响页面的性能）</p>
+<ol>
+<li>
+<p>配置项</p>
+<ul>
+<li>root：所监听对象的具体的祖先元素，viewport</li>
+<li>rootMargin：计算交叉状态的时候，将margin加到祖先元素上，有效扩大或者缩小祖先元素的判断范围。</li>
+<li>threshold：设置阈值。达到阈值，触发函数。</li>
+</ul>
+</li>
+<li>
+<p>回调函数</p>
+<p>传递回调函数的时候会传递一个包含inersectionObserverEntry对象的数组，七个属性</p>
+<ol>
+<li>time：返回一个记录从intersectionObserver的时间原点到交叉被触发的时间戳</li>
+<li>target：目标元素</li>
+<li>rootBounds：祖先元素的矩阵信息</li>
+<li>boundingClientRect：目标元素的矩阵信息</li>
+<li>intersectionRect：组件元素与目标元素的相交信息</li>
+<li>intersectionRatio：返回intersectionRect与boundingClientRect比例值</li>
+<li>isIntersecting:目标元素是否与祖先元素相交。</li>
+</ol>
+</li>
+<li>
+<p>实现</p>
+<ul>
+<li>observe：开始监听一个目标元素</li>
+<li>unobserve：停止监听特定元素</li>
+<li>disconnect：是inetersectionObserver对象停止工作</li>
+<li>takeRecords：为所有的监听目标返回一个intersectionObserverEntry对象数组并且停止监听这些目标。</li>
+</ul>
+</li>
+</ol>
+<p>实现</p>
+<pre><code class="language-js">function lazyLoad(images, options = {}) {
+        if (!(this instanceof lazyLoad)) return new lazyLoad(images, optoins);
+        this.setting = Object.assign(
+          {},
+          { src: &quot;data-src&quot;, srcset: &quot;data-srcset&quot;, selector: &quot;.lazyload&quot; },
+          options
+        );
+        this.images =
+          images || document.querySelectorAll(this.setting.selector);
+        this.observer = null;
+        this.init();
+      }
+      lazyLoad.prototype.init = function () {
+        let self = this;
+        let observerConfig = {
+          root:null,
+          rootMargin:'0px',
+          threshold:[0]
+        }
+        this.observer  = new IntersectionObserver(entries =&gt; {
+          entries.forEach(entry =&gt;{
+            const target = entry.target;
+            if(entry.intersectionRatio &gt; 0){
+              this.observer.unobserve(target)
+              const src = target.getAttribute(this.setting.src)
+              const srcset = target.getAttribute(this.setting.srcset)
+              if('img'===target.tagName.toLocaleLowerCase()){
+                if(src)target.src = src;
+                if(srcset)target.srcset = srcset;
+              }else{
+                target.style.backgroundImage = `url(${src})`
+              }
+            }
+          })
+        },observerConfig)
+        this.images.forEach(image =&gt; this.observer.observe(iamge))
+      };
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[数组扁平化 VS 对象扁平化]]></title>
         <id>https://Leonhaiwang.github.io/post/shu-zu-bian-ping-hua-vs-dui-xiang-bian-ping-hua/</id>
@@ -1121,190 +1352,6 @@ jsy.apply(null,[1,2,3]);
 <p><strong>post会产生两个TCP数据包？</strong></p>
 <p>部分会说post会先传head，返回100，再传body。</p>
 <p>http中没有明确说明POST会产生两个数据包，实测不会，所以不是post的必然行为。</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[TCP相关问题]]></title>
-        <id>https://Leonhaiwang.github.io/post/tcp-xiang-guan-wen-ti/</id>
-        <link href="https://Leonhaiwang.github.io/post/tcp-xiang-guan-wen-ti/">
-        </link>
-        <updated>2021-03-25T09:12:19.000Z</updated>
-        <content type="html"><![CDATA[<h2 id="tcp连接特点">TCP连接特点？</h2>
-<ul>
-<li>面向连接的，可靠的字节流</li>
-<li>收到确认，不关心具体传输什么</li>
-</ul>
-<h2 id="tcp的可靠性如何保证">TCP的可靠性如何保证？</h2>
-<ul>
-<li>分块传输</li>
-<li>等待确认</li>
-<li>确认回复</li>
-<li>数据校验</li>
-<li>乱序排序</li>
-<li>重复丢弃</li>
-<li>流量缓冲</li>
-</ul>
-<img src="https://pic3.zhimg.com/80/v2-e8aaab48ff996e5cd8a5b39dc450bd6a_720w.jpg" alt="img" style="zoom:80%;" />
-<h2 id="三次握手四次挥手">三次握手四次挥手</h2>
-<p>为了保证服务端能接收到客户端的信息，并作出正确的应答，进行前两次握手，为了保证客户端能够接受到服务端的信息并能做出正确的应答进行后两次握手。</p>
-<p>SOCKET原理</p>
-<p>套接字（socket）概念：</p>
-<h2 id="三次握手过程">三次握手过程：</h2>
-<p>ACK：表示应答有效。TCP应答号将会包含在TCP数据包中；0 ：无效，1：有效。</p>
-<p>SYN：同步序号，用来建立连接。连接请求的时候：SYN=1，ACK=0。被连接响应的时候：SYN=1，ACK=1。</p>
-<p>FIN：终结，释放一个连接。表明此报文的发送方数据已经发送完毕，要求释放连接。</p>
-<ul>
-<li>第一次握手：建立连接。客户端发送连接请求报文段，将SYN为1，Sequence Number为x；客户端进入SYN_SEND状态，等待服务器的确认。</li>
-<li>第二次握手：服务器收到SYN报文段。服务器收到客户端的SYN报文段，将这个报文段进行确认，设置Acknowledge Numver为x+1,；同时自己发送SYN请求，SYN=1，Sequence NUmber为y；服务器将所有信息放在一个报文段（SYN+ACK）中，一起发送给客户端，此时服务器进入SYN_RECV状态。</li>
-<li>第三次握手：客户端收到服务器的SYN+ACK报文段。将Acknowledge Number置为y+1.向服务器发送ACK报文段。报文段发送完毕，客户端服务端都进入ESRABLISHED状态，完成三次握手。</li>
-</ul>
-<p>然后就可以开始传输数据。</p>
-<p><strong>为什么要三次握手？</strong>：为了防止已失效的连接请求报文段突然又传送到了服务端，产生错误。解决‘网络中存在延迟重复分组’问题。</p>
-<p><strong><mark>防止服务器一直等待浪费资源</mark></strong></p>
-<p>加入client有一个请求 报文段 在网络中延迟了，在serve关闭以后才发送到，serve会以为是否client在请求连接，但是client并没有，server就会一直等待</p>
-<h2 id="四次挥手">四次挥手</h2>
-<p>断开连接</p>
-<ul>
-<li>第一次分手：主机1（可是是客户端，服务端），设置sequence Number 和AcknowledgeNumber，向主机2发送一个FIN报文段；此时，主机1进入FIN_WAIT状态，表示主机1没有数据要发送给主机2了</li>
-<li>第二次分手：主机2收到了主机1的FIN报文段，向主机1回复一个ACK报文，AcknowledgeNumber为SequenceNumbare +1；主机1进去FIN_WAIT_2状态；主机2告诉主机1，同意关闭请求。</li>
-<li>第三次分手：主机2向主机1发送FIN报文段。请求关闭连接，同时主机2进入Last_ACK状态。</li>
-<li>第四次分手：主机1收到主机2发送的FIN报文段。向主机2发送ACK报文段，然后主机1进入TIME_WAIT状态；主机2收到主机1的ACK报文以后就关闭连接。此时，主机1等待2msl没有回复，就证明server正常关闭。主机1关闭连接。</li>
-</ul>
-<p>当有一方要关闭连接的时候，会发送一个指令FIN告诉对方，要关闭连接了，对方会回复一个ACK。此时一个方向上的连接关闭。但是另外一个方向上任然可以传输数据。等到发送完所有的数据以后，会发送一个FIN告诉对方来关闭连接，接收方发送ACK来关闭连接。</p>
-<p>tips：接受到FIN的只能回复一个ACK不能立即回复一个FIN，因为结束时上层应用层给出的。</p>
-<p><strong>为甚吗要四次分手</strong>？</p>
-<p>TCP是一种全双工的，面向连接的，可靠的，基于字节流的运输层通信协议。</p>
-<p>当主机1发送FIN报文段的时候，只是表示主机1没有数据要发送给主机2了，但是在这个阶段，主机1还可以接受主机2的数据。</p>
-<p>当主机2返回ACK报文的时候，表示他已经知道主机1没有数据发送了，但是主机2还是可以发送给主机1.</p>
-<p>当主机2页发送了FIN报文的时候，主机2也没有报文要发送了，之后就会终止连接。</p>
-<p>三次挥手是指发送了三个报文段，四次挥手是指发送了四个报文段。</p>
-<h2 id="三次握手四次挥手-2">三次握手四次挥手</h2>
-<ul>
-<li>
-<p>客户端发送一个SYN=1，并指明客户端自己的序列号，ISN(c)</p>
-</li>
-<li>
-<p>服务端发送自己的SYN作为报答，同样指明自己的ISN(s)，为了确认客户端的ISN，将ISN(c)+1作为ACK值，这样发送一个SYN，序列号就会+1，如果丢失，重传</p>
-</li>
-<li>
-<p>为了确认服务端的SYN，客户端将ISN(s)+1,作为ACK返回给服务端</p>
-</li>
-<li>
-<p>客户端发送一个FIN段，并且包含一个希望接受者看到自己当前的序列号K，同时还有一个ACK表示确认对方最近一次发过来的数据。</p>
-</li>
-<li>
-<p>服务端将K+1作为ACK，表示收到了上一个包，这时上层的应用程序会被告知另外一段发起关闭，通常将会引起自己的关闭。</p>
-</li>
-<li>
-<p>服务端发送自己的FIN段，ACK=k+1，Seq=L</p>
-</li>
-<li>
-<p>客户端确认；ACK = L+1</p>
-</li>
-</ul>
-<figure data-type="image" tabindex="1"><img src="https://i.loli.net/2020/12/19/zypdg3BrPxTMmbJ.png" alt="image-20201219180109462" loading="lazy"></figure>
-<h2 id="tcp数据的传输">TCP数据的传输</h2>
-<h3 id="传输的数据分类">传输的数据分类</h3>
-<ul>
-<li>成块数据传输：量大，报文段常常满。</li>
-<li>交互数据传输：量小，报文段为微小分组，大量的微小分组在广域网传输会出现拥堵。</li>
-</ul>
-<h3 id="交互数据传输技术">交互数据传输技术</h3>
-<h4 id="经受时延的确认">经受时延的确认</h4>
-<ul>
-<li>概念：TCP收到数据并不是发送ack确认，而是稍后发送。</li>
-<li>目的：需要将ACK与沿着该方向发送的数据一起发送，减少开销。</li>
-<li>特点：接收方不必确认每一个收到的分组，ACK是累计的，它表示接受放已经正确收到了一直到确认序号为-1的所有的字节。</li>
-<li>延时时间：200ms</li>
-</ul>
-<h4 id="nagle算法">Nagle算法</h4>
-<ul>
-<li>解决微小分组导致在广域网上出现的拥堵问题。</li>
-<li>核心：减少了通过广域网传输的小分组数目。</li>
-<li>原理：要求一个TCP连接上最多只能有一个未被确认的未完成的分组，该分组的确认到达之前，不能发送其他的分组。TCP收集这些分组，确认到来之前以一个分组的形式发送。</li>
-<li>优点：自适应，确认到达快，数据发送的越快。</li>
-</ul>
-<h2 id="滑动窗口传输">滑动窗口传输</h2>
-<p>发送方和接收方的速率不匹配的时候，保证可靠传输和包乱序的问题。</p>
-<p>接受方根据目前缓冲区的大小，通知发送方目前能接受的最大值。发送方根据接受方的处理能力来发送数据。防疫接收端处理不过来。</p>
-<p>窗口大小：接收方发给发送端的值-----&gt;接受方目前能接受的最大的值。</p>
-<figure data-type="image" tabindex="2"><img src="https://i.loli.net/2020/12/19/6f1VrgNnlYcXdoH.png" alt="image-20201219200139033" loading="lazy"></figure>
-<figure data-type="image" tabindex="3"><img src="https://i.loli.net/2020/12/19/KzkSCoHGBmPcZTd.png" alt="image-20201219200422221" loading="lazy"></figure>
-<h3 id="拥塞窗口">拥塞窗口</h3>
-<p>发送方发送速度过快，导致路由器拥堵（解决）</p>
-<p>发送方增加一个拥塞窗口，每次收到ACK，窗口值+1.。发送时，取拥塞窗口和接收方发来的窗口大小值取最小值</p>
-<p>作用：发送方流量控制</p>
-<h3 id="引发问题">引发问题</h3>
-<h4 id="1零窗口">1.零窗口</h4>
-<p>接收端处理较慢，发送端发送较快，窗口大小慢慢为0</p>
-<p>ZWP技术，发送ZWP给接受方，让接收方ACK窗口大小</p>
-<h4 id="2糊涂窗口">2.糊涂窗口</h4>
-<p>接收方处理太忙，取不完数据，导致发送方越来越小，最后只发送几个字节的数据。</p>
-<p>tips：数据比TCP和IP头小太多，网络利用率低</p>
-<p>避免对窗口大小作相应：</p>
-<ul>
-<li>发送端：Nagle算法，一次只能发送一个分组，分组确认后再发送别的分组。</li>
-<li>接收端：窗口大小小于某值的时候，直接ACK，阻止窗口发送，窗口变大后再发。</li>
-</ul>
-<h2 id="超时重传">超时重传</h2>
-<p>TCP中确认和数据可能丢失，在发送端设立定时器，如果一段时候还未确认，就重传该数据。</p>
-<h3 id="定时器类型">定时器类型</h3>
-<ul>
-<li>重传定时器：等待收到确认。</li>
-<li>坚持定时器：使窗口大小保持不断流动</li>
-<li>保活定时器：检测空闲连接崩溃或者是重启</li>
-<li>2MSL定时器：检测Time_wait时间。（关闭连接）</li>
-</ul>
-<h3 id="机制">机制</h3>
-<p>接受端给发送端确认ACK只会是最后一个连续的包。</p>
-<h3 id="被动等待">被动等待</h3>
-<p>接收端被动的等待发送端超时，然后重发，但是发送端不知道具体应该从哪里重发，可能会造成带宽浪费哦。-------&gt;等待被动超时-时间太久</p>
-<h3 id="主动快传">主动快传</h3>
-<p>不以实际为驱动，以数据为驱动重传。</p>
-<h4 id="原理">原理：</h4>
-<ul>
-<li>如果包未送达，就一直ACK最后那个可能被丢的包</li>
-<li>发送方连续收到3次相同的ACK就重传，不用等待超时。</li>
-</ul>
-<p>利弊：</p>
-<ul>
-<li>解决了被动等待时间浪费的问题----时间问题</li>
-<li>无法解决重传一个还是所有的数据问题----带宽浪费问题</li>
-</ul>
-<h3 id="sack方法">SACK方法</h3>
-<p>基于快传在TCP头中加入SACK-----解决了应该发送什么包问题，带宽</p>
-<p>SACK记录数值范围，表示什么值被收到了。</p>
-<p>SACK只是一种辅助，发送方不能完全依赖。主要依赖ACK和定时器timeOut</p>
-<h2 id="确定超时时间">确定超时时间</h2>
-<p>路由器和网络流量均会变化，定时器不能设置为一个固定的值。</p>
-<p>超时：重发慢，效率低，性能差。</p>
-<p>缺时：未丢就重发，网络拥堵-----&gt;更多的重发和超时。</p>
-<h3 id="动态变化">动态变化</h3>
-<ul>
-<li>每次重传时间为上次的一倍，直到最大间隔为64s，‘指数退避’</li>
-<li>首次到最后放弃重传时间一般为9min</li>
-<li>依赖以往的往返时间动态计算</li>
-</ul>
-<p>往返时间并不是一个准确的值，会通过多次取值，估算。</p>
-<ul>
-<li>被平滑的RTT估计器</li>
-<li>被平滑的均值偏差估计器</li>
-</ul>
-<h3 id="重传时间的具体计算">重传时间的具体计算</h3>
-<ul>
-<li>计算往返时间RTT，保存结果</li>
-<li>通过测量结果维护一个被平滑的RTT估计器和被平滑的均值偏差估计器</li>
-<li>根据这两个估计器计算</li>
-</ul>
-<h2 id="超时重传引起问题">超时重传引起问题</h2>
-<p>当网络延迟的时候，会引起重传，过多的重传会导致网络负担加重，从而引起更大的延时和丢包。恶心循环</p>
-<p>解决：</p>
-<ul>
-<li>慢启动，降低分组进入网络的传输速率</li>
-<li>拥塞避免：处理丢失分组的算法</li>
-<li>快速重传</li>
-<li>快速恢复</li>
-</ul>
 ]]></content>
     </entry>
 </feed>

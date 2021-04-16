@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title># 图片懒加载-按需加载 | Leon</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://Leonhaiwang.github.io/favicon.ico?v=1618581232325">
+<link rel="stylesheet" href="https://Leonhaiwang.github.io/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="#为什么要进行图片懒加载
+
+可以让不可视的图片不去加载，避免一次性加载过多的图片导致请求阻塞，提高网站的加载速度，提高用户体验。
+
+原理：监听图片资源容器是否出现在视口区域内，决定图片是否要加载。如何判断元素处于加载区域
+实现
+
+给目标元素..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://Leonhaiwang.github.io">
+        <img src="https://Leonhaiwang.github.io/images/avatar.png?v=1618581232325" class="site-logo">
+        <h1 class="site-title">Leon</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      It is always day one !
+    </div>
+    <div class="site-footer">
+       <a href="https://github.com/Leonhaiwang" target="_blank">Leon github</a> | <a class="rss" href="https://Leonhaiwang.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title"># 图片懒加载-按需加载</h2>
+            <div class="post-date">2021-04-16</div>
+            
+            <div class="post-content" v-pre>
+              <p>#为什么要进行图片懒加载</p>
+<ul>
+<li>可以让不可视的图片不去加载，避免一次性加载过多的图片导致请求阻塞，提高网站的加载速度，提高用户体验。</li>
+</ul>
+<p><strong>原理</strong>：监听图片资源容器是否出现在视口区域内，决定图片是否要加载。<mark>如何判断元素处于加载区域</mark></p>
+<h2 id="实现">实现</h2>
+<ol>
+<li>给目标元素一张占位图，将真实的图片链接存在自定义的属性中，data-src</li>
+<li>监听scroll事件</li>
+<li>利用scroll中的Element.getBoundingClientRect()方法判断目标元素与视口的交叉状态、</li>
+<li>当交叉的时候，将真实的图片链接赋值给src或者bgcimage</li>
+</ol>
+<ul>
+<li>scroll可能会被高频触发，这里可以加上节流函数</li>
+<li>getBoundingClientRect()方法：返回元素的大小以及相对于视口的位置信息
+<ul>
+<li>left top</li>
+<li>width height</li>
+<li><mark>结合视口的宽度和高度，就可以判断元素是否出现在视口区域内</mark></li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-js"> function isElementInViewport(el) {
+        const { left, top, width, height } = el.getBoundingClientRect();
+        const w = window.innerWidth || document.documentElement.clientWidth;
+        const h = window.innerHeight || document.documentElement.clientHeight;
+        return top &lt;= h &amp;&amp; top + height &gt;= 0 &amp;&amp; left &lt;= w &amp;&amp; left + width &gt;= 0;
+      }
+</code></pre>
+<p>实现</p>
+<ul>
+<li>scroll只有在滚动的时候才会加载，要首屏渲染</li>
+<li>addEventListener()注册事件处理程序的时候，需要保存事件处理程序的引用，以便销毁注册的事件程序。</li>
+</ul>
+<pre><code class="language-js">//简单的html端
+      document.addEventListener(&quot;DOMContentLoaded&quot;, () =&gt; {
+        //获取所有的class为lazy的img标签
+        let lazyImages = [].slice.call(document.querySelectorAll(&quot;img.lazy&quot;));
+        //active节流
+        let active = false;
+        const lazyLoad = () =&gt; {
+          //throttle：200ms执行一次
+          if (active) return;
+          active = true;
+          setTimeout(() =&gt; {
+            lazyImages.forEach((lazyImage) =&gt; {
+              //判断元素是否进去viewport
+              if (isInViewport(lazyImage)) {
+                //设置真实的图片
+                //ele.dataset   ==== 读取自定义属性集合
+                lazyImage.src = lazyImage.dataset.src;
+                lazyImage.srcset = lazyImage.dataset.srcset;
+                //删除class 防止下次重复查找到img标签
+                lazyImage.classList.remove(&quot;lazy&quot;);
+              }
+              //更新lazyimags数组，把还没处理的元素拿出来
+              lazyImages = lazyImages.filter((image) =&gt; {
+                return image != lazyImage;
+              });
+              //全部处理完毕，移除监听
+              if (lazyImages.length === 0) {
+                document.removeEventListener(&quot;scroll&quot;, lazyLoad);
+                document.removeEventListener(&quot;resize&quot;, lazyLoad);
+                document.removeEventListener(&quot;orientationchange&quot;, lazyLoad);
+              }
+            });
+            active = false;
+          }, 200);
+        };
+        document.addEventListener(&quot;scroll&quot;, lazyLoad);
+        document.addEventListener(&quot;resize&quot;, lazyLoad);
+        document.addEventListener(&quot;orientationchange&quot;, lazyLoad);
+      });
+</code></pre>
+<p>适合单页面应用的写法</p>
+<pre><code class="language-js">function LazyLoad() {
+  // 这个active是节流throttle所用的标志位，这里用到了闭包知识
+  let active = false;
+
+  const lazyLoad = () =&gt; {
+    // throttle相关：200ms内只会执行一次lazyLoad方法
+    if (active) return;
+    active = true;
+
+    setTimeout(() =&gt; {
+      // 获取所有class为lazy的img标签，这里由于之前已经把处理过的img标签的class删掉了  所以不会重复查找
+      let lazyImages = [].slice.call(document.querySelectorAll(&quot;img.lazy&quot;));
+
+      lazyImages.forEach(lazyImage =&gt; {
+        // 判断元素是否进入viewport
+        if (isInViewport(lazyImage)) {
+          // &lt;img class=&quot;lazy&quot; src=&quot;[占位图]&quot; data-src=&quot;[真实url地址]&quot; data-srcset=&quot;[不同屏幕密度下，不同的url地址]&quot; alt=&quot;I'm an image!&quot;&gt;
+          // ele.dataset.* 可以读取自定义属性集合，比如data-*
+          // img.srcset 属性用于设置不同屏幕密度下，image自动加载不同的图片  比如&lt;img src=&quot;image-128.png&quot; srcset=&quot;image-256.png 2x&quot; /&gt;
+          lazyImage.src = lazyImage.dataset.src;
+          lazyImage.srcset = lazyImage.dataset.srcset;
+          // 删除class  防止下次重复查找到改img标签
+          lazyImage.classList.remove(&quot;lazy&quot;);
+        }
+
+        // 当全部处理完了，移除监听
+        if (lazyImages.length === 0) {
+          document.removeEventListener(&quot;scroll&quot;, lazyLoad);
+          window.removeEventListener(&quot;resize&quot;, lazyLoad);
+          window.removeEventListener(&quot;orientationchange&quot;, lazyLoad);
+        }
+      })
+
+      active = false;
+    }, 200);
+  }
+
+  document.addEventListener(&quot;scroll&quot;, lazyLoad);
+  document.addEventListener(&quot;resize&quot;, lazyLoad);
+  document.addEventListener(&quot;orientationchange&quot;, lazyLoad);
+}
+
+</code></pre>
+<p>将函数放在mounted中</p>
+<pre><code class="language-vue">mounted: function () {
+    LazyLoad();
+  }
+
+</code></pre>
+<p>封装img-lazy组件</p>
+<pre><code class="language-js">&lt;template&gt;
+  &lt;img :class=&quot;['lazy', className]&quot; :src=&quot;defaultImg&quot; :data-src=&quot;url&quot; :data-srcset=&quot;`${url} 1x`&quot; alt=&quot;fordeal&quot;&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+  export default {
+    props: {
+      url: {
+        type: String
+      },
+      defaultImg: {
+        type: String,
+        default: [默认图片]
+      className: {
+        type: String,
+        default: ''
+      }
+    }
+  }
+&lt;/script&gt;
+
+</code></pre>
+<p>使用</p>
+<pre><code class="language-vue">&lt;img-lazy className=&quot;image&quot; :url=&quot;item.display_image&quot; /&gt;
+</code></pre>
+<h2 id="现在api">现在api</h2>
+<p>IntersectionObserver接口：<strong>异步</strong>监听目标元素与其祖先或者视窗的交叉状态，不会随着目标元素的滚动同步触发。（不会影响页面的性能）</p>
+<ol>
+<li>
+<p>配置项</p>
+<ul>
+<li>root：所监听对象的具体的祖先元素，viewport</li>
+<li>rootMargin：计算交叉状态的时候，将margin加到祖先元素上，有效扩大或者缩小祖先元素的判断范围。</li>
+<li>threshold：设置阈值。达到阈值，触发函数。</li>
+</ul>
+</li>
+<li>
+<p>回调函数</p>
+<p>传递回调函数的时候会传递一个包含inersectionObserverEntry对象的数组，七个属性</p>
+<ol>
+<li>time：返回一个记录从intersectionObserver的时间原点到交叉被触发的时间戳</li>
+<li>target：目标元素</li>
+<li>rootBounds：祖先元素的矩阵信息</li>
+<li>boundingClientRect：目标元素的矩阵信息</li>
+<li>intersectionRect：组件元素与目标元素的相交信息</li>
+<li>intersectionRatio：返回intersectionRect与boundingClientRect比例值</li>
+<li>isIntersecting:目标元素是否与祖先元素相交。</li>
+</ol>
+</li>
+<li>
+<p>实现</p>
+<ul>
+<li>observe：开始监听一个目标元素</li>
+<li>unobserve：停止监听特定元素</li>
+<li>disconnect：是inetersectionObserver对象停止工作</li>
+<li>takeRecords：为所有的监听目标返回一个intersectionObserverEntry对象数组并且停止监听这些目标。</li>
+</ul>
+</li>
+</ol>
+<p>实现</p>
+<pre><code class="language-js">function lazyLoad(images, options = {}) {
+        if (!(this instanceof lazyLoad)) return new lazyLoad(images, optoins);
+        this.setting = Object.assign(
+          {},
+          { src: &quot;data-src&quot;, srcset: &quot;data-srcset&quot;, selector: &quot;.lazyload&quot; },
+          options
+        );
+        this.images =
+          images || document.querySelectorAll(this.setting.selector);
+        this.observer = null;
+        this.init();
+      }
+      lazyLoad.prototype.init = function () {
+        let self = this;
+        let observerConfig = {
+          root:null,
+          rootMargin:'0px',
+          threshold:[0]
+        }
+        this.observer  = new IntersectionObserver(entries =&gt; {
+          entries.forEach(entry =&gt;{
+            const target = entry.target;
+            if(entry.intersectionRatio &gt; 0){
+              this.observer.unobserve(target)
+              const src = target.getAttribute(this.setting.src)
+              const srcset = target.getAttribute(this.setting.srcset)
+              if('img'===target.tagName.toLocaleLowerCase()){
+                if(src)target.src = src;
+                if(srcset)target.srcset = srcset;
+              }else{
+                target.style.backgroundImage = `url(${src})`
+              }
+            }
+          })
+        },observerConfig)
+        this.images.forEach(image =&gt; this.observer.observe(iamge))
+      };
+</code></pre>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://Leonhaiwang.github.io/post/shu-zu-bian-ping-hua-vs-dui-xiang-bian-ping-hua/">
+                  <h3 class="post-title">
+                    数组扁平化 VS 对象扁平化
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+
+  </body>
+</html>
