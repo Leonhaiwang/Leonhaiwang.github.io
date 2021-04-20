@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>数组扁平化 | Leon</title>
+<title>JavaScript不借助第三个变量交换两个变量的值 | Leon</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,10 +18,24 @@
 
 
 
-    <meta name="description" content="//reduce
-function flattens(arr) {
-  return arr.reduce((prev, cur) =&gt; {
-    return prev.concat(Array.isArray(cur) ? fl..." />
+    <meta name="description" content="let a = 1,b = 2;
+
+
+借助了es6的中结构赋值方法
+
+[a,b] = [b,a]
+
+
+先把a作为一个对象，赋值键值对，取出键值对
+
+a = {a:b,b:a}
+a = a.a;
+b = a.b;
+
+
+数组：类似上一种方法
+
+..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -93,65 +107,54 @@ function flattens(arr) {
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">数组扁平化</h2>
-            <div class="post-date">2021-03-30</div>
+            <h2 class="post-title">JavaScript不借助第三个变量交换两个变量的值</h2>
+            <div class="post-date">2021-04-20</div>
             
             <div class="post-content" v-pre>
-              <pre><code>//reduce
-function flattens(arr) {
-  return arr.reduce((prev, cur) =&gt; {
-    return prev.concat(Array.isArray(cur) ? flattens(cur) : cur)
-  }, [])
-}
-//遍历
-function flattens1(arr1) {
-  let result = []
-  for(let i= 0;i&lt;arr.length;i++){
-    if(Array.isArray(arr[i])){
-      result = result.concat(flattens1(arr[i]))
-    }else{
-      result.push(arr[i])
-    }
-  }
-  return result
-}
-//forEach
-function flattens2 (arr) {
-  arr.forEach(element =&gt; {
-    if(Array.isArray(element)){
-      result = result.concat(flattens1(element))
-    }else{
-      result.push(element)
-    }
-  });
-}
-//...
-function flattens3 (arr) {
-  while(arr.some(item=&gt;Array.isArray(item))){
-    arr = [].concat(...arr)
-  }
-  return arr
-}
-//apply some
-function flattens4 (arr) {
-  while(arr.some(item=&gt;Array.isArray(item))){
-    arr = [].concat.apply([],arr)
-  }
-  return arr
-}
-//map
-function flattens5 (arr) {
-  return arr.toString().split(',').map(item=&gt;+item)
-}</code></pre>
+              <pre><code class="language-js">let a = 1,b = 2;
+</code></pre>
+<ul>
+<li>借助了es6的中结构赋值方法</li>
+</ul>
+<pre><code class="language-js">[a,b] = [b,a]
+</code></pre>
+<ul>
+<li>先把a作为一个对象，赋值键值对，取出键值对</li>
+</ul>
+<pre><code>a = {a:b,b:a}
+a = a.a;
+b = a.b;
+</code></pre>
+<ul>
+<li>数组：类似上一种方法</li>
+</ul>
+<pre><code>a = [a,b]
+a = a[1]
+b = a[0]
+</code></pre>
+<ul>
+<li>异或</li>
+</ul>
+<pre><code>a ^= b;
+b ^= a;
+a ^= b;
+</code></pre>
+<ul>
+<li>加减</li>
+</ul>
+<pre><code>a = a + b;
+b = a - b;
+a = a - b;
+</code></pre>
 
             </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://Leonhaiwang.github.io/post/dui-pai-xu/">
+                <a href="https://Leonhaiwang.github.io/post/tu-pian-lan-jia-zai-an-xu-jia-zai/">
                   <h3 class="post-title">
-                    堆排序
+                    图片懒加载-按需加载
                   </h3>
                 </a>
               </div>
