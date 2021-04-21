@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>webpack基础知识 | Leon</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://Leonhaiwang.github.io/favicon.ico?v=1618991219381">
+<link rel="stylesheet" href="https://Leonhaiwang.github.io/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="js静态打包工具(根据依赖图映射项目所需要的所有的模块，生成一个或者多个bundle.js)
+概念
+
+模块打包
+
+执行模块打包，将不同的文件整合打包在一起，保证引用正确。我们就可以在项目中自由的划分文件模块
+
+
+编译兼容
+
+帮助代码做pol..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://Leonhaiwang.github.io">
+        <img src="https://Leonhaiwang.github.io/images/avatar.png?v=1618991219381" class="site-logo">
+        <h1 class="site-title">Leon</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      It is always day one !
+    </div>
+    <div class="site-footer">
+       <a href="https://github.com/Leonhaiwang" target="_blank">Leon github</a> | <a class="rss" href="https://Leonhaiwang.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">webpack基础知识</h2>
+            <div class="post-date">2021-04-21</div>
+            
+            <div class="post-content" v-pre>
+              <p>js<strong>静态打包工具</strong>(根据依赖图映射项目所需要的所有的模块，生成一个或者多个bundle.js)</p>
+<h2 id="概念">概念</h2>
+<ul>
+<li>模块打包
+<ul>
+<li>执行模块打包，将不同的文件整合打包在一起，保证引用正确。我们就可以在项目中自由的划分文件模块</li>
+</ul>
+</li>
+<li>编译兼容
+<ul>
+<li>帮助代码做polyfill，编译转换无法识别的文件。我们可以 用新的语法特性来开发。</li>
+</ul>
+</li>
+<li>能力扩展
+<ul>
+<li>在打包的基础上帮助我们实现：按需加载，代码压缩等。提高自动化程度，工程效率，打包输出质量。</li>
+</ul>
+</li>
+</ul>
+<p>打包：将模块化的依赖性文件，生成浏览器可以识别的文件</p>
+<p>entry （入口）：通过入口文件去找到需要相互依赖的文件。默认值是 <code>./src/index.js</code></p>
+<p>output（输出）：在哪里创建输出文件以及所创建的bundle.js，以及如何命名</p>
+<p>loader（插件）：（加载其他扩展语言的功能）：解析文件，使得webpack可以处理其他的文件转为有效模块，tips：sass。</p>
+<p>​							必须包含两个属性 test：需要解析的文件格式 ，use：使用的转换方式</p>
+<p>插件（plugin）：具有某种特定功能的操作-打包优化，资源管理，注入环境</p>
+<p>模式 mode：开发环境or生产环境。 production，development。</p>
+<h2 id="entry">entry</h2>
+<pre><code class="language-js">module.export = {
+	entry:&quot;./src/index.js&quot;
+}
+</code></pre>
+<p>在创建多页面应用程序，需要多个独立分离的视图</p>
+<pre><code>module.export = {
+  entry:{
+    pageone:&quot;./src/index.js&quot;,
+    pagetwo:&quot;./src/ssc.js&quot;
+  }
+}
+</code></pre>
+<p>在多页面应用程序中，服务器会传输一个新的html文档给你的客户端，页面重新加载此文档，资源被重新下载，在这个期间有很多机会去做别的事情。</p>
+<h2 id="output">output</h2>
+<p>可以有多个entry起点，但是只能有一个输出位置、。</p>
+<pre><code>module.exports = {
+  output: {
+    filename: 'bundle.js',
+  }
+};
+</code></pre>
+<h2 id="mode">mode</h2>
+<p>development  ||  production || none</p>
+<pre><code>mode: 'production'
+</code></pre>
+<h2 id="loader">loader</h2>
+<p>对模块的源代码进行切换。主要是将不同的语言转换为js。</p>
+<p>在转换以前需要首先安装相应的loader</p>
+<pre><code class="language-node">npm install --save-dev css-loader
+</code></pre>
+<p>配置</p>
+<pre><code class="language-js"> module: {
+    //对某种格式的文件进行转换处理
+    rules: [
+      {
+        test: /\.css$/,   //正则匹配css文件
+        use: [
+          //解析的顺序是从下到上的 --逆序执行
+          //将js样式内容插入style标签中
+          &quot;style-loader&quot;,
+          //首先将css文件变为js
+          &quot;css-loader&quot;
+        ]
+      },
+      {
+        //匹配图片文件
+        test: /\.(jpg|png|gif)$/,
+        loader: 'url-loader',
+        //限制内容 
+        //图片小于8kb，base64
+        options: {
+          limit: 8 * 1024,
+          // 关闭url模块化解析
+          esModules: false,
+          //取图片hash的前十位 + 扩展名
+          name: &quot;[hash:10].[ext]&quot;
+        }
+      }, {
+        test:/\.html$/,
+        loader:&quot;html-loader&quot;
+      }
+    ]
+  },
+</code></pre>
+<h2 id="plugin">plugin</h2>
+<p>插件---解决loader无法解决的事情。</p>
+<p>由于插件可以传递参数，在webpack.config.js中，向plugin属性传入new实例。</p>
+<pre><code class="language-js">let HtmlWebpackPlugin = require(&quot;html-webpack-plugin&quot;)
+
+plugins: [
+    new HtmlWebpackPlugin({
+      template = '../demo04/src/index.html'
+    })
+  ],
+</code></pre>
+<h2 id="配置configuration">配置（configuration）</h2>
+<p>webpack.config.js 是一个导出webpack配置对象的js文件。会根据配置对象上定义的属性进行处理。</p>
+<p>可通过Node.js Common.JS 引入</p>
+<ul>
+<li>通过require() 引入文件</li>
+<li>通过require() 使用npm工具函数</li>
+<li>使用js控制流表达式</li>
+<li>对常用值使用变量and常量</li>
+</ul>
+<h2 id="模块module">模块（module）</h2>
+<p>模块化编程中，开发者将程序分解为功能离散的模块。</p>
+<p>每个模块有比程序更小的接触面，使得验证，测试等方便。模块可以提供可靠的抽象和封装界限，使得程序中的模块条理清楚</p>
+<h2 id="为什么是webpack">为什么是webpack？</h2>
+<p>在webpack以前，我们使用脚本来存放每个功能，或者使用一个大型的js文件包含所有的。这种方式相对来说都有缺陷。</p>
+<p>Node是一个在js运行的时候，可以在浏览器环境之外的计算机和服务器中使用的，webpack就运行在node.js中。</p>
+<p>不仅可以编写模块，还支持任何模块格式，并同时处理资源。</p>
+<h2 id="模块解析-module-resolution">模块解析 （module resolution）</h2>
+<p>resolver是一个库，帮助找到模块的绝对路径，一个模块可以作为另一个模块的依赖模块，然后被引用。</p>
+<p>可以通过 <code>import</code> <code>require</code>关键字来找到依赖。</p>
+<p>模块可以解析 <code>模块路径</code> <code>绝对路径</code> <code>相对路径</code></p>
+<p><strong>缓存</strong>：每次文件系统访问都会被缓存，以便更快的触发对同一个文件的多个请求。在观察者模式下，只有修改过的文件会从缓存中拆除。</p>
+<h2 id="依赖图">依赖图</h2>
+<p>一个文件依赖于另外一个文件，webpack中这就是依赖关系，so webpack 可以接受非代码资源，并且作为依赖提供给应用程序。</p>
+<p>从entry开始，webpack递归构建一个依赖图，这个依赖图包含着应用陈旭的每个模块，打包为一个bundle.js供浏览器加载。</p>
+<h2 id="manifest">manifest</h2>
+<p>runtime：在浏览器运行的过程中，webpack用来连接模块化应用程序所需的所有的代码。包含：模块交互的时候，连接模块所需的加载和解析的逻辑。包括已经加载到浏览器中的连接模块逻辑。</p>
+<p><strong>manfifest</strong>：webpack如何管理所需的模块之间的交互。</p>
+<p><strong>当compiler开始执行，解析时候，会保留所有模块的详细要点，这个数据集合被称为manifest，当完成打包并发送到浏览器的时候，runtime会通过manifest来解析加载模块</strong>。------无论使用的是import or require，都已经转为 <code>__webpack__reqiure__</code>, 指向模块标识符。</p>
+<p>tips：对于通过缓存提升浏览器性能有着很大的帮助。</p>
+<h2 id="部署目标target">部署目标：target</h2>
+<pre><code>module.export = {
+	target:'node'
+}
+</code></pre>
+<p>可以通过下面这种方法导出多个同构的libray</p>
+<pre><code class="language-js">const path = require('path');
+const serverConfig = {
+  target: 'node',
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'lib.node.js'
+  }
+  //…
+};
+
+const clientConfig = {
+  target: 'web', // &lt;=== 默认是 'web'，可省略
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'lib.js'
+  }
+  //…
+};
+
+module.exports = [ serverConfig, clientConfig ];
+</code></pre>
+<h2 id="热更新">热更新</h2>
+<ul>
+<li>保留在完全重新加载页面期间丢失的应用程序状态</li>
+<li>只更新变更内容</li>
+<li>在源代码中对css/js进行修改，会立刻在浏览器中进行更新</li>
+</ul>
+<h3 id="如何运行的这是">如何运行的这是</h3>
+<h4 id="应用程序中">应用程序中</h4>
+<ol>
+<li>应用程序要求HMR runtime检查 更新。</li>
+<li>HMR runtime 异步的下载更新，然后通知应用程序。</li>
+<li>应用程序要求HMR runtime 应用更新</li>
+<li>HMR runtime 同步的应用更新。</li>
+</ol>
+<h4 id="在compiler中">在Compiler中</h4>
+<p>除了普通资源，compiler需要发出update，将之前的版本更新到新的版本</p>
+<p>update：</p>
+<ul>
+<li>更新后的manifest（json）</li>
+<li>一个或者多个updated chunk</li>
+</ul>
+<h4 id="在模块中">在模块中</h4>
+<p>HMR可选功能，只会影响包含HMR代码的模块，通过style-loader追加补丁，在更新的时候，通过新的样式替换旧的样式</p>
+<p>在模块中实现了HMR功能，可以在当模块中写入HMR代码，在更新的时候，记录更新，完成更新。</p>
+<p>如果在一个模块中没有HMR，更新就会冒泡，意味着包含这个模块的所有的东西都会被更新。</p>
+<h4 id="在项目中">在项目中</h4>
+<p>在开发环境中，可以将HMR作为LiveReload的替代，在重新加载整个页面之前，hot模式会尝试使用HMR来更新。</p>
+<h2 id="webpackconfigjs"><strong>webpack.config.js</strong></h2>
+<pre><code class="language-js">let path = require(&quot;path&quot;) 
+console.log(path.resolve(__dirname,&quot;dist&quot;));
+module.export =  {
+  //入口文件
+  entry:&quot;./src/index.js&quot;,
+  output:{
+    //输出文件名称：
+    filename:&quot;bundle.js&quot;,
+    //输出路径
+    //绝对路径
+    path:path.resolve(__dirname,&quot;dist&quot;)
+  },
+  mode:&quot;development&quot;
+}
+</code></pre>
+<h3 id="loader-2">loader</h3>
+<p>进行源代码的转换--- ts ---&gt;js</p>
+<ul>
+<li>将css文件导入js文件中</li>
+<li>配置webpack中的modules（对某种格式的文件进行转换处理）</li>
+<li>webpack</li>
+</ul>
+<pre><code class="language-js">let path = require(&quot;path&quot;) 
+console.log(path.resolve(__dirname,&quot;dist&quot;));
+module.export =  {
+  //入口文件
+  entry:&quot;./src/index.js&quot;,
+  output:{
+    //输出文件名称：
+    filename:&quot;bundle.js&quot;,
+    //输出路径
+    //绝对路径
+    path:path.resolve(__dirname,&quot;dist&quot;)
+  },
+  mode:&quot;development&quot;,
+  //loader的配置
+  module:{
+    //对某种格式的文件进行转换处理
+    rules:[
+      {
+        test:/\.css$/,   //正则匹配css文件
+        use:[
+          //解析的顺序是从下到上的 --逆序执行
+          //将js样式内容插入style标签中
+          &quot;style-loader&quot;,
+          //首先将css文件变为js
+          &quot;css-loader&quot;
+        ]
+      },
+      {
+        
+      }
+    ]
+  }
+}
+</code></pre>
+<h3 id="plugin整合html">plugin整合html</h3>
+<ul>
+<li>安装 html-webpack-plugin 插件</li>
+<li>在plugin中注册插件</li>
+</ul>
+<pre><code class="language-js"> plugins: [
+    new HtmlWebpackPlugin({
+      template = '../demo04/src/index.html'
+    })
+  ]
+</code></pre>
+<h3 id="图片资源打包">图片资源打包</h3>
+<pre><code class="language-js">module: {
+    //对某种格式的文件进行转换处理
+    rules: [
+      {
+        test: /\.css$/,   //正则匹配css文件
+        use: [
+          //解析的顺序是从下到上的 --逆序执行
+          //将js样式内容插入style标签中
+          &quot;style-loader&quot;,
+          //首先将css文件变为js
+          &quot;css-loader&quot;
+        ]
+      },
+      {
+        //匹配图片文件
+        test: /\.(jpg|png|gif)$/,
+        loader: 'url-loader',
+        //限制内容 
+        //图片小于8kb，base64
+        options: {
+          limit: 8 * 1024,
+          // 关闭url模块化解析
+          esModules: false,
+          //取图片hash的前十位 + 扩展名
+          name: &quot;[hash:10].[ext]&quot;
+        }
+      }, {
+        test:/\.html$/,
+        loader:&quot;html-loader&quot;
+      }
+    ]
+  },
+</code></pre>
+<pre><code class="language-js">let path = require(&quot;path&quot;)
+// console.log(path.resolve(__dirname,&quot;dist&quot;));
+let HtmlWebpackPlugin = require(&quot;html-webpack-plugin&quot;)
+module.export = {
+  //入口文件
+  entry:{
+    pageone:&quot;./src/index.js&quot;,
+    pagetwo:&quot;./src/ssc.js&quot;
+  },
+  output: {
+    //输出文件名称：
+    filename: &quot;bundle.js&quot;,
+    //输出路径
+    //绝对路径
+    path: path.resolve(__dirname, &quot;dist&quot;)
+  },
+  mode: &quot;production&quot;, // 设置mode
+  //loader的配置
+  module: {
+    //对某种格式的文件进行转换处理
+    rules: [
+      {
+        test: /\.css$/,   //正则匹配css文件
+        use: [
+          //解析的顺序是从下到上的 --逆序执行
+          //将js样式内容插入style标签中
+          &quot;style-loader&quot;,
+          //首先将css文件变为js
+          &quot;css-loader&quot;
+        ]
+      },
+      {
+        //匹配图片文件
+        test: /\.(jpg|png|gif)$/,
+        loader: 'url-loader',
+        //限制内容 
+        //图片小于8kb，base64
+        options: {
+          limit: 8 * 1024,
+          // 关闭url模块化解析
+          esModules: false,
+          //取图片hash的前十位 + 扩展名
+          name: &quot;[hash:10].[ext]&quot;
+        }
+      }, {
+        test:/\.html$/,
+        loader:&quot;html-loader&quot;
+      }
+    ]
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template = '../demo04/src/index.html'
+    })
+  ],
+  devServer:{
+    //项目构建路径
+    contentBase:path.resolve(__dirname,&quot;dist&quot;),
+    //启动gzip编码的压缩
+    compress:true,
+    port:3000,
+    open:true
+  }
+}
+</code></pre>
+<h1 id="模块打包运行原理">模块打包运行原理</h1>
+<p>打包过程</p>
+<ol>
+<li>读取webpack配置参数</li>
+<li>创建compiler对象并且开始解析项目</li>
+<li>从入口entry开始解析，遍历递归解析树，<strong>形成依赖关系树</strong></li>
+<li>对不同类型的依赖文件使用对应的loader进行编译，最终都转为JavaScript</li>
+<li>整个过程中webpack会通过发布订阅模式，向外抛出hooks，webpack监听关键的事件节点，干预结果输出。</li>
+</ol>
+<p>对于文件的解析与构建，webpack主要通过compiler与compiltion实现。</p>
+<p>compiler是一个全局单例：把控整个webpack打包构建流程。</p>
+<p>compilation对象是每一次构建的上下文对象，包含了当前构建所需要的所有的信息，	每次热更新和重新构建，compiler都会生成一个compilation负责。</p>
+<p>每个模块间的依赖关系，依赖于AST语法树，每个模块文件在loader文件解析完成后，会生成acron模块代码的AST语法树，通过语法树分析是否有依赖的模块。</p>
+<p>最终webpack打包的是一个<strong>IIFE</strong>（立即执行函数）</p>
+<h1 id="sourcemap">SourceMap</h1>
+<p>将编译打包压缩后的代码，映射回源代码。</p>
+<p>由于打包压缩后的代码没有阅读性可言，一旦在开发中报错，不好。sourceMap帮助我们快速的定位到源代码的位置。</p>
+<p>通常有一份对应的映射文件来解决标记混淆代码对应源码的位置======&gt;.map文件</p>
+<p>有了代码压缩文件以后，只要在代码的最后加上，即可sourceMap生效。</p>
+<pre><code>//# sourceURL=/path/to/file.js.map
+</code></pre>
+<p>webpack打包的bundle文件，在每个文件的代码末端，都会加上上方的注释。需要浏览器的支持。</p>
+<h1 id="loader思路">loader思路</h1>
+<p>loader存在的意义：在webpack中，打包出来的都是js代码，对于sass等文件，先进行转换，才能继续执行打包文件。</p>
+<p>针对每个文件类型，loader是支持以数组的形式配置多个。webpack在转换文件类型的时候，会按顺序链式调用每一个loader，前一个loader会作为后一个loader的入参。因此返回值必须是js字符串，单一职责，只关心loader的输入和输出。</p>
+<p>loader函数中的this由webpack提供，可以通过this对象，提供的相关属性，获取当前loader需要的各种信息。</p>
+<h1 id="plugin-2">plugin</h1>
+<p>loader文件转换，plugin功能扩展。</p>
+<p>webpack基于发布订阅者模式，在运行的生命周期中广播出许多的事件，插件通过监听这些事件，在特定的时间段执行特定的插件任务，从而实现想要的功能。</p>
+<p>loader中compiler提供了整个生命周期相关的钩子，compilation提供了模块和依赖相关的钩子。</p>
+<p>webpack的事件机制基于webpack自己实现的一套tapable事件流方案。</p>
+<h2 id="遵循的规范和原则">遵循的规范和原则</h2>
+<ul>
+<li>插件必须是一个函数或者一个而包含apply方法的对象，才能访问到compiler实例</li>
+<li>传给每个插件的compiler和compilation是一个引用，如果在一个地方修改了，会影响后面的插件。</li>
+<li>异步的事件处理函数需要在事件处理结束以后调用回调函数，通知webpack进入下一个流程。</li>
+</ul>
+<pre><code class="language-js">class Myplugin{
+	apply(compiler){
+	//找到合适事件的钩子，实现自己的插件功能
+		compiler.hooks.emit.tap('MyPlugin',compilation=&gt;{
+			//当前打包构建流程的上下文
+			//doSomething
+		})
+	}
+}
+</code></pre>
+<p>https://juejin.cn/post/6844904094281236487#heading-0</p>
+<h1 id="经典面试">经典面试</h1>
+<h2 id="常见loader">常见loader</h2>
+<ul>
+<li>row-loader：加载文件原始内容</li>
+<li>file-loader：把文件输出到一个文件夹中，通过url去引用输出的文件</li>
+<li>source-map-loader：加载额外的source-map-loader,方便调试</li>
+<li>image-loader：加载并且压缩图片文件</li>
+<li>sass-loder：sass---&gt;css</li>
+<li>css-loader：加载css支持模块压缩文件导入等特性</li>
+<li>babel-loader：es5-----&gt;es6</li>
+</ul>
+<h2 id="常见plugin">常见plugin</h2>
+<ul>
+<li>ignore-plugin：忽略部分文件</li>
+<li>html-webpack-plugin：简化html文件</li>
+<li>web-webpack-plugin：方便的为单页面应用输出html</li>
+<li>clean-webpack-plugin：目录清理</li>
+<li>mini-css-extract-plugin：分离样式文件</li>
+<li>serviceworker-webpack-plugin：为应用增加离线缓存功能。</li>
+</ul>
+<h2 id="loader-plugin区别">loader plugin区别</h2>
+<p>loader：对接受到的内容进行一个转换，由于webpack只认识js。</p>
+<p>plugin：插件。扩展webpack的功能。在webpack运行的过程中会抛出许多的hooks，plugin监听这些hooks在合适的时机通过webpack的api改变输出结果。</p>
+<p>loader在modules.rules中单独配置，数组。每一项都是一个Object{test，loader，options}</p>
+<p>plugin在plugins中单独配置，数组。每一项是一个plugin实例。</p>
+<h2 id="webpack可以提高效率的插件">webpack可以提高效率的插件</h2>
+<p>webpack-merge：提取公共的配置，减少重复配置的代码</p>
+<p>webpack-dashboard：友好展示相关的打包信息。</p>
+<h2 id="webpack模块打包原理">webpack模块打包原理</h2>
+<p>webpack为每一个文件设置一个导入导出的环境，本质上并没有修改代码执行逻辑，代码执行顺序也是一样的。</p>
+<h2 id="文件监听原理">文件监听原理</h2>
+<p>开始监听</p>
+<ul>
+<li>启动webpack的时候命令带上--watch参数</li>
+<li>配置webpack.config.js的时候设置watch：ture</li>
+</ul>
+<p>发生代码变化的时候自动重新构建新的输出文件</p>
+<p>原理：轮询判断文件的最后编辑时间是否发生变化，如果某个文件发生了变化，并不会立即告诉监听者，而是会先换存起来，aggreateTimout再执行。</p>
+<pre><code class="language-js">module.export = {
+watch:true,
+//只有开启了监听模式的时候，watchOptions才有意义
+watchOptions:{
+	ignored:/node_modules/,
+	aggregateTomeout:300,//监听到变化后300ms再去执行
+	poll:1000//判断文件是否发生变化是通过不停的轮询系统指定的文件有没有变化实现的。
+}
+}
+</code></pre>
+<h2 id="webpack热更新原理">webpack热更新原理</h2>
+<p>hot module replacement 热更新 HMR   <strong>不用更新浏览器将新变更的模块替换掉旧的模块</strong></p>
+<p>HMR核心就是客户端从服务端拉去更新后的文件，准确的说：chunk diff（需要更新的部分）</p>
+<p>在浏览器和WDS之间构建了一个websocket，在本地资源源码发生变化的时候，wds向浏览器推送更新（并且带上构建的hash），让客户端与上一次的资源进行对比。客户端对比出差异以后向wds发送ajax获取更改的内容（文件列表，hash）。这样客户端就可以借助这些信息向wds发起JSONP请求。</p>
+<p>webpack通过node端的接口watch文件变化，重建模块并且通知浏览器变化的文件名，浏览器重新请求获取文件并替换该文件对应的模块。</p>
+<h2 id="文件指纹">文件指纹</h2>
+<p>打包输出文件名的后缀</p>
+<p>hash：和整个项目的构建相关，只要项目的文件上有所修改，整个项目构建的hash值就会修改。</p>
+<p>chunkhash：和webpack打包的chunk相关，不同的entry会有不同的chunkhash</p>
+<p>contenthash：根据文件内容来定义hash，文件内容变化，则contenthash变化。</p>
+<h3 id="js文件指纹">js文件指纹</h3>
+<p>设置output的filename：用chunkhash。</p>
+<pre><code>filename:'[name][chunkhash:8].js'
+</code></pre>
+<h3 id="css文件指纹">css文件指纹</h3>
+<pre><code>module.export = {
+	plugins:[
+	new MiniCssExtractPlugin({
+		filename:`[name][contenthash:8].css`
+	})
+	]
+}
+</code></pre>
+<h2 id="如何优化webpack的构建速度">如何优化webpack的构建速度</h2>
+<ul>
+<li>使用高版本的webpack，node</li>
+<li>压缩代码
+<ul>
+<li>多进程并行压缩
+<ul>
+<li>webpack-paralle-uglify-plugin</li>
+</ul>
+</li>
+<li>通过mini-css-extract-plugin提取chunk中的css到单独文件，</li>
+</ul>
+</li>
+<li>图片压缩
+<ul>
+<li>配置image-wepack-loader</li>
+</ul>
+</li>
+<li>提取页面公共资源
+<ul>
+<li>基础包分离
+<ul>
+<li>使用html-webpack-externals-plugin，将基础包通过cdn引入，不打入bundle</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>利用缓存构建二次构建速度
+<ul>
+<li>babel-loader：开启缓存</li>
+</ul>
+</li>
+</ul>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://Leonhaiwang.github.io/post/javascript-bu-jie-zhu-di-san-ge-bian-liang-jiao-huan-liang-ge-bian-liang-de-zhi/">
+                  <h3 class="post-title">
+                    JavaScript不借助第三个变量交换两个变量的值
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+
+  </body>
+</html>
