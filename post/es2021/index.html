@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>es2021 | Leon</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://Leonhaiwang.github.io/favicon.ico?v=1619487475263">
+<link rel="stylesheet" href="https://Leonhaiwang.github.io/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="String.prototype.replaceAll()
+替换字符串中所有的匹配的值，可以完全代替replace以前需要和正则搭配的方案。
+ 	let str = &quot;l am a cat&quot;
+    console.lo..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://Leonhaiwang.github.io">
+        <img src="https://Leonhaiwang.github.io/images/avatar.png?v=1619487475263" class="site-logo">
+        <h1 class="site-title">Leon</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      It is always day one !
+    </div>
+    <div class="site-footer">
+       <a href="https://github.com/Leonhaiwang" target="_blank">Leon github</a> | <a class="rss" href="https://Leonhaiwang.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">es2021</h2>
+            <div class="post-date">2021-04-27</div>
+            
+            <div class="post-content" v-pre>
+              <h2 id="stringprototypereplaceall">String.prototype.replaceAll()</h2>
+<p>替换字符串中所有的匹配的值，可以完全代替replace以前需要和正则搭配的方案。</p>
+<pre><code class="language-js"> 	let str = &quot;l am a cat&quot;
+    console.log(str.replaceAll(&quot;a&quot;,&quot;-&quot;));//l -m - c-t
+</code></pre>
+<h2 id="数字分割符">数字分割符</h2>
+<p>_ : 主要功能是咋使用长度很长的数字时候方便阅读使用。使用的时候不会对数字产生任何影响</p>
+<pre><code class="language-js">	let bigNum1 = 11223344;
+    let bigNum2 = 11_22_33_44;
+    console.log(bigNum1 === bigNum2);//true
+</code></pre>
+<h2 id="逻辑赋值运算符">逻辑赋值运算符</h2>
+<p>&amp;&amp;=    ||=   ??=</p>
+<p>x &amp;&amp;= y  //只有当x为真的时候才会赋值给y。</p>
+<p>x  ||= y  //只有当x为假的时候才会赋值给y。如果x为真，y为假，则不会赋值。</p>
+<p>x ?? = y //只有x=null或x=undefined的时候才会将y赋值给x。</p>
+<pre><code class="language-js">	let x = true;
+    let y = &quot;yy&quot;;
+    x &amp;&amp;= y
+    console.log(x);//yy
+
+    let x = 0;
+    let y = &quot;yy&quot;;
+    x ||= y
+    console.log(x);//yy
+
+    let x = null;
+    let y = &quot;yy&quot;;
+    x ??= y
+    console.log(x);//yy
+</code></pre>
+<h2 id="promiseany">Promise.any()</h2>
+<p>这个方法接受多个promise，只要有一个resolve就返回。返回值是resolve的第一个Promise。</p>
+<p>如果所有的Promise均被拒绝，返回Error，并且报错原因。</p>
+<ul>
+<li>
+<p>全部resolved</p>
+</li>
+<li>
+<pre><code class="language-js">let promise1 = new Promise((resolve,reject)=&gt;{
+      setTimeout(()=&gt;{
+        resolve(&quot;p1 is resolved&quot;);
+      },100)
+    })
+    let promise2 = new Promise((resolve,reject)=&gt;{
+      setTimeout(()=&gt;{
+        resolve(&quot;p2 is resolved&quot;);
+      },50)
+    })
+    ;(
+      async function(){
+        let res = await Promise.any([promise1,promise2])
+        console.log(res);//p2 is resolved
+      }
+    )()
+</code></pre>
+<ul>
+<li>
+<p>只有一个resolved</p>
+</li>
+<li>
+<pre><code class="language-js">let promise1 = new Promise((resolve,reject)=&gt;{
+      setTimeout(()=&gt;{
+        resolve(&quot;p1 is resolved&quot;);
+      },100)
+    })
+    let promise2 = new Promise((resolve,reject)=&gt;{
+      setTimeout(()=&gt;{
+        reject(&quot;p2 is resolved&quot;);
+      },50)
+    })
+    ;(
+      async function(){
+        let res = await Promise.any([promise1,promise2])
+        console.log(res);//p2 is resolved
+      }
+    )()
+</code></pre>
+<ul>
+<li>
+<p>全部rejected</p>
+</li>
+<li>
+<pre><code class="language-js">let promise1 = new Promise((resolve,reject)=&gt;{
+      setTimeout(()=&gt;{
+        reject(&quot;p1 is resolved&quot;);
+      },100)
+    })
+    let promise2 = new Promise((resolve,reject)=&gt;{
+      setTimeout(()=&gt;{
+        reject(&quot;p2 is resolved&quot;);
+      },50)
+    })
+    ;(
+      async function(){
+        let res = await Promise.any([promise1,promise2])
+        console.log(res);// All promises were rejected
+      }
+    )()
+</code></pre>
+<h2 id="弱引用-weakref">弱引用 ： WeakRef</h2>
+<p>在JavaScript中，当你创建了一个对象时候，指向这个对象的引用在js中永远无法被垃圾回收，只要这个引用存在，这个对象就一直存在。</p>
+<p>可以通过创建对象的弱引用，在跟踪对象的时候不会进行垃圾回收。有助于减少缓存。</p>
+<p>使用new关键字创建新的weakRef，并把对象作为参数传入括号中，读取的时候需要通过deref()使用。</p>
+<pre><code class="language-js">const myWeakRef = new WeakRef({
+      name:'refName',
+      size:'10000'
+    })
+    console.log(myWeakRef.deref().name);//refName
+    console.log(myWeakRef.deref().size);//10000
+   
+</code></pre>
+<h2 id="finalizers-和-finalizationregistry">Finalizers 和 FinalizationRegistry</h2>
+<p>创建一个回调函数，在被回收的时候调用</p>
+<pre><code class="language-js">const reg = new FinalizationRegistry((val) =&gt; {
+  console.log(val)
+})
+;(() =&gt; {
+  // 创建新对象:
+  const obj = {}
+  reg.register(obj, 'obj has been garbage-collected.')
+})()
+</code></pre>
+<p>tips:尽量不要使用weakRef和finalizer，因为还不是非常稳定，可能会造成错误。</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://Leonhaiwang.github.io/post/git-ji-chu-zhi-shi-yi-ji-chang-yong-ming-ling/">
+                  <h3 class="post-title">
+                    Git基础知识以及常用命令
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+
+  </body>
+</html>
