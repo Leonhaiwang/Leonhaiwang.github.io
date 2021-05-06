@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>伪类和伪元素的区别？使用场景？ | Leon</title>
+<title>AJAX理解以及简单实现 | Leon</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,10 +18,11 @@
 
 
 
-    <meta name="description" content="伪类：用来选择不能够被普通选择器选择的文档以外的元素  ：hover    可以理解为特定状态元素的选择器
-伪元素：需要创建不存在与文档中的元素，比如：before     类似添加一个新的节点到DOM中
-区别：
-表示方法：css2中伪类a..." />
+    <meta name="description" content="ajax：异步请求的文本开发数据。在不需要重新加载页面的情况下，通过异步请求加载数据并且展示在页面上。请求的是字符串等，并不是html：节省带宽。
+手写ajax思路：
+
+创建异步XMLhttpRequest对象
+配置请求信息，get/pos..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -93,33 +94,82 @@
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">伪类和伪元素的区别？使用场景？</h2>
-            <div class="post-date">2021-03-25</div>
+            <h2 class="post-title">AJAX理解以及简单实现</h2>
+            <div class="post-date">2021-05-06</div>
             
             <div class="post-content" v-pre>
-              <p>伪类：用来选择不能够被普通选择器选择的文档以外的元素  ：hover    <strong>可以理解为<mark>特定状态</mark>元素的选择器</strong></p>
-<p>伪元素：需要创建不存在与文档中的元素，比如：before     <strong>类似添加一个新的节点到</strong>DOM<strong>中</strong></p>
-<h2 id="区别">区别：</h2>
-<p>表示方法：css2中伪类and伪元素都是以：  css2.1以后伪类用<code>:</code> 伪元素用 <code>::</code>表示。</p>
-<p>定义不同：伪类（假的类）------&gt;添加类达到效果，伪元素（假的元素 ）-----&gt;添加元素达到效果。</p>
-<h2 id="异同">异同：</h2>
+              <p>ajax：<strong>异步</strong>请求的文本开发数据。在不需要重新加载页面的情况下，通过异步请求加载数据并且展示在页面上。请求的是字符串等，并不是html：节省带宽。</p>
+<p>手写ajax思路：</p>
 <ul>
-<li>都用来表示文档树以外的“元素”</li>
-<li>伪类和伪元素分别用 ：  | ：：</li>
-<li><mark>伪类是操作文旦中已经有的元素，伪元素是创建一个文档以外的元素</mark></li>
-<li><strong>如果没有伪元素，是否需要添加元素才能达到效果，如果是---&gt;伪元素    反之---&gt;伪类</strong></li>
+<li>创建异步XMLhttpRequest对象</li>
+<li>配置请求信息，get/post</li>
+<li>发送请求</li>
+<li>服务响应请求：同步\异步</li>
 </ul>
-<p>伪类：  hover active link ：nth-child<br>
-伪元素： ：before ::first-letter        ::selection  ::backdrop</p>
+<pre><code class="language-js">    //创建ajax核心对象 
+    var xmL = null;
+    if (window.XMLHttpRequest) {
+      xmL = new XMLHttpRequest();
+    } else {
+      //ie6 7
+      xmL = new ActiveXObject(&quot;Microsoft.XMLHTTP&quot;);
+    }
+    //向服务器发送请求
+    xmL.open(method,url,async)
+    //设置请求头
+    xmL.setRequestHeader(head,value,true)
+    xmL.setRequestHeader(&quot;Content-type&quot;,&quot;application/json&quot;)
+    //如果是post请求需要使用send方法传递参数
+    send(string)
+    xmL.send(&quot;name=li&amp;age=12&quot;)
+
+    //服务器处理
+    //同步
+    document.getElementById(&quot;#id&quot;).innerHTML = xmL.responseText;
+    //异步：在请求状态改变事件中处理   2=接到响应头  3=加载中。
+    xmL.onreadystatechange = function(){
+      if(xmL.readyState == 4 &amp;&amp; xmL.status == 200){
+        document.getElementById(&quot;#id&quot;).innerHTML = xmL.responseText;
+      }
+    }
+</code></pre>
+<p>自己封装一个ajax库</p>
+<pre><code class="language-js">//方法 请求地址 参数 回调函数
+    function ajax(method, url, params, done) {
+      // 创建xhr对象
+      var xhr = new XMLHttpRequest();
+      //将方法转为大写
+      method = method.toUpperCase();
+      //参数拼接
+      var pair = [];
+      for (let key in params) {
+        pair.push(key + &quot;=&quot; + params[key]);
+      }
+      var str = pair.join(&quot;&amp;&quot;);
+      if (method === &quot;GET&quot;) url = &quot;?&quot; + str;
+      xhr.open(method, url);
+      var data = null;
+      if (method === &quot;POST&quot;) {
+        xhr.setRequestHeader(&quot;Content-Type&quot;, &quot;application/JSON&quot;);
+        data = str;
+      }
+      xhr.send(data);
+      xmL.onreadystatechange = function () {
+        if (xmL.readyState == 4 &amp;&amp; xmL.status == 200) {
+          document.getElementById(&quot;#id&quot;).innerHTML = xmL.responseText;
+        }
+      };
+    }
+</code></pre>
 
             </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://Leonhaiwang.github.io/post/callapplybind-li-jie-ji-shi-xian/">
+                <a href="https://Leonhaiwang.github.io/post/es2021/">
                   <h3 class="post-title">
-                    call、apply、bind 理解及实现
+                    es2021
                   </h3>
                 </a>
               </div>
